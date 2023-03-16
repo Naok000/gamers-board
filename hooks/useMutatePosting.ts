@@ -2,6 +2,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { Posting } from '@prisma/client';
+import { useRouter } from 'next/router';
 
 type posting = {
   id: string;
@@ -11,7 +12,7 @@ type posting = {
 
 export const useMutatePosting = () => {
   const queryClient = useQueryClient();
-  // const router = useRouter();
+  const router = useRouter();
 
   const createPostingMutation = useMutation(
     async (posting: Omit<posting, 'id'>) => {

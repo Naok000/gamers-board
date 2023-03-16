@@ -54,6 +54,7 @@ export default function WithSubnavigation() {
   const router = useRouter();
   //   const user = useRecoilValue(currentUser);
   const [isLogin, setIsLogin] = useRecoilState(isLoginState);
+  const user = useRecoilValue(currentUser);
 
   const handleLogout = async () => {
     queryClient.removeQueries(['postings']);
@@ -105,7 +106,7 @@ export default function WithSubnavigation() {
           </Flex>
         </Flex>
 
-        {isLogin ? (
+        {user ? (
           <Stack direction={'row'} spacing={7}>
             <Button onClick={handleLogout}>Logout</Button>
           </Stack>

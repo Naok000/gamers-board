@@ -1,11 +1,4 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  HStack,
-  Text,
-  useColorModeValue,
-} from '@chakra-ui/react';
+import { Box, Flex, Heading, HStack, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { BsArrowUpRight } from 'react-icons/bs';
 import { Layout } from '../../components/Layout';
@@ -27,7 +20,7 @@ const BoardPage = () => {
               bg='lightgrey'
               border={'1px'}
               borderColor='black'
-              boxShadow={useColorModeValue('6px 6px 0 black', '6px 6px 0 cyan')}
+              shadow='xl'
             >
               <Box p={4}>
                 <Heading color={'black'} fontSize={'2xl'} noOfLines={1}>

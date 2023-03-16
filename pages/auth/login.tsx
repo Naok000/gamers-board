@@ -14,20 +14,24 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { isLoginState } from '../../recoil/boardState';
+import { useQueryUser } from '../../hooks/useQueryUser';
+import { currentUser } from '../../recoil/boardState';
 
-const login = () => {
+const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const setIsLogin = useSetRecoilState(isLoginState);
+  // const setIsLogin = useSetRecoilState(isLoginState);
+  const setUser = useSetRecoilState(currentUser);
   const signInEmail = async () => {
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         email,
         password,
       });
-      setIsLogin(true);
+      // setIsLogin(true);
+      // const { data: user } = useQueryUser();
+      // setUser(user);
       setEmail('');
       setPassword('');
       await router.push('/board');
@@ -99,4 +103,4 @@ const login = () => {
   );
 };
 
-export default login;
+export default Login;
