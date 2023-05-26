@@ -1,10 +1,12 @@
-import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import axios from 'axios';
 import { useEffect } from 'react';
-import { RecoilRoot } from 'recoil';
+import { RecoilRoot, useRecoilValue, useSetRecoilState } from 'recoil';
+import { currentUserId, SessionUser } from '../recoil/boardState';
+import { parseCookies, setCookie } from 'nookies';
+import { options } from '../lib/nookiesOption';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,6 +16,34 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+const UserObserver = () => {
+  const setUserId = useSetRecoilState(currentUserId);
+
+  useEffect(() => {
+    const cookies = parseCookies();
+    console.log(cookies.user);
+
+    if (cookies?.user !== 'undefined') {
+      const cookiesUserId: SessionUser = JSON?.parse(cookies.user);
+
+      if (cookiesUserId) {
+        console.log('UserObserver', cookiesUserId);
+        setUserId(cookiesUserId);
+      }
+    }
+  }, [setUserId]);
+  return null;
+};
+
+function WatchUser() {
+  const user = useRecoilValue(currentUserId);
+
+  useEffect(() => {
+    setCookie(null, 'user', JSON.stringify(user), options);
+  }, [user]);
+  return null;
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
   axios.defaults.withCredentials = true;
@@ -28,13 +58,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ChakraProvider>
-        <RecoilRoot>
+    <ChakraProvider>
+      <RecoilRoot>
+        <QueryClientProvider client={queryClient}>
           <Component {...pageProps} />
-        </RecoilRoot>
-      </ChakraProvider>
-    </QueryClientProvider>
+          <UserObserver />
+          <WatchUser />
+        </QueryClientProvider>
+      </RecoilRoot>
+    </ChakraProvider>
   );
 }
 

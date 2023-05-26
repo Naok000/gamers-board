@@ -1,13 +1,11 @@
 import { atom } from 'recoil';
-import { User } from '@prisma/client';
 
-// export type User = {
-//   uid: string;
-//   username?: string;
-// };
+export type SessionUser = {
+  id: string;
+};
 
-export const currentUser = atom<Omit<User, 'password'> | undefined>({
-  key: 'currentUser',
+export const currentUserId = atom<SessionUser | undefined>({
+  key: 'currentUserId',
   default: undefined,
 });
 

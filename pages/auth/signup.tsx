@@ -11,14 +11,24 @@ import {
   Stack,
   useColorModeValue,
 } from '@chakra-ui/react';
+import { User } from '@prisma/client';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { currentUserId } from '../../recoil/boardState';
 
 const signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const setUser = useSetRecoilState(currentUserId);
   const router = useRouter();
+  const getUser = async () => {
+    const { data } = await axios.get<Omit<User, 'password'>>(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/session-id`
+    );
+    return data;
+  };
   const signupInEmail = async () => {
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
@@ -27,7 +37,9 @@ const signup = () => {
       });
       setEmail('');
       setPassword('');
-      router.push('/board');
+      const user = await getUser();
+      setUser(user);
+      await router.push('/board');
     } catch (err) {
       console.log(err);
     }

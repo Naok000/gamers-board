@@ -8,32 +8,37 @@ import {
   Input,
   Stack,
   useColorModeValue,
+  Link,
 } from '@chakra-ui/react';
+import { User } from '@prisma/client';
 import axios from 'axios';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import { useQueryUser } from '../../hooks/useQueryUser';
-import { currentUser } from '../../recoil/boardState';
+import { currentUserId } from '../../recoil/boardState';
 
 const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const setIsLogin = useSetRecoilState(isLoginState);
-  const setUser = useSetRecoilState(currentUser);
+
+  const getUser = async () => {
+    const { data } = await axios.get<Omit<User, 'password'>>(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/session-id`
+    );
+    return data;
+  };
+  const setUserId = useSetRecoilState(currentUserId);
   const signInEmail = async () => {
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
         email,
         password,
       });
-      // setIsLogin(true);
-      // const { data: user } = useQueryUser();
-      // setUser(user);
       setEmail('');
       setPassword('');
+      const user = await getUser();
+      setUserId(user);
       await router.push('/board');
     } catch (err) {
       console.log(err);
@@ -82,7 +87,9 @@ const Login = () => {
                 justify={'space-between'}
               >
                 <Link href='#'>Forgot password?</Link>
-                <Link href='/signup'>Create new Account</Link>
+                <Link href='/auth/signup' color={'blue.400'}>
+                  Create a new Account
+                </Link>
               </Stack>
               <Button
                 bg={'blue.400'}

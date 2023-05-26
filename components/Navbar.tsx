@@ -24,8 +24,9 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { currentUser, isLoginState } from '../recoil/boardState';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { currentUserId } from '../recoil/boardState';
+import { destroyCookie } from 'nookies';
 
 interface NavItem {
   label: string;
@@ -40,7 +41,7 @@ const NAV_ITEMS: Array<NavItem> = [
   },
   {
     label: 'Mypage',
-    href: '#',
+    href: '/mypage',
   },
   {
     label: 'Create Posting',
@@ -52,17 +53,17 @@ export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
   const queryClient = useQueryClient();
   const router = useRouter();
-  //   const user = useRecoilValue(currentUser);
-  const [isLogin, setIsLogin] = useRecoilState(isLoginState);
-  const user = useRecoilValue(currentUser);
+  const user = useRecoilValue(currentUserId);
+  const setUser = useSetRecoilState(currentUserId);
 
   const handleLogout = async () => {
     queryClient.removeQueries(['postings']);
     // キャッシュに格納されているユーザー情報をログアウト時に消去する
-    queryClient.removeQueries(['user']);
-    setIsLogin(false);
+    // queryClient.removeQueries(['user']);
+    destroyCookie(null, 'user');
+    setUser(undefined);
     await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`);
-    router.push('/');
+    router.push('/board');
   };
 
   return (
@@ -106,7 +107,7 @@ export default function WithSubnavigation() {
           </Flex>
         </Flex>
 
-        {user ? (
+        {user !== undefined ? (
           <Stack direction={'row'} spacing={7}>
             <Button onClick={handleLogout}>Logout</Button>
           </Stack>

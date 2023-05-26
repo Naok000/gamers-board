@@ -14,23 +14,27 @@ model User {
   email     String    @unique
   password  String
   userName  String?
-  comments   Comment[]
-  posts   Posting[]
+  comments  Comment[]
+  posts     Posting[]
 }
 
 model Comment {
-  id      String @id
-  comment String
-  userId  String
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id
+  comment   String
+  userId    String
+  timestamp DateTime @default(now())
+  postingId String
+  Posting   Posting  @relation(fields: [postingId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Posting {
-  id        String   @id
-  createdAt DateTime @default(now())
+  id        String    @id
+  createdAt DateTime  @default(now())
   updatedAt DateTime
   title     String
   content   String?
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Comment   Comment[]
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
