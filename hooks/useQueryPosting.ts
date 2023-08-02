@@ -1,7 +1,10 @@
-// import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { Comment, Posting } from '@prisma/client';
+import { Comment, Posting, User } from '@prisma/client';
+
+interface userComment extends Comment {
+  user: User;
+}
 
 export const useQueryPosting = () => {
   const getPosting = async () => {
@@ -37,14 +40,30 @@ export const useQueryPostingId = (postingId: string | string[] | undefined) => {
 
 export const useQueryComment = (postingId: string | string[] | undefined) => {
   const getComment = async () => {
-    const { data } = await axios.get<Comment[]>(
+    const { data } = await axios.get<userComment[]>(
       `${process.env.NEXT_PUBLIC_API_URL}/board/${postingId}/comment`
     );
     return data;
   };
-  return useQuery<Comment[], Error>({
+  return useQuery<userComment[], Error>({
     queryKey: ['comments', postingId],
     queryFn: getComment,
+    onError: (err: any) => {
+      console.log(err);
+    },
+  });
+};
+
+export const useQueryOwnPosting = () => {
+  const getOwnPosting = async () => {
+    const { data } = await axios.get<Posting[]>(
+      `${process.env.NEXT_PUBLIC_API_URL}/user/own-posting`
+    );
+    return data;
+  };
+  return useQuery<Posting[], Error>({
+    queryKey: ['own_postings'],
+    queryFn: getOwnPosting,
     onError: (err: any) => {
       console.log(err);
     },
