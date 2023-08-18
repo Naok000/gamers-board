@@ -19,6 +19,7 @@
  - Next.js
  - TypeScript
  - Chakra UI
+ - firebase storage
 
 ### バックエンド
   - Nest.js
