@@ -22,7 +22,7 @@
  - firebase storage
 
 ### バックエンド
-  - Nest.js
+  - Nest.js - code: https://github.com/Naok000/gamers-restapi
   - Prisma
   - PostgreSQL
 
