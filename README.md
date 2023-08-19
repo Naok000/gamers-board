@@ -19,6 +19,7 @@
  - Next.js
  - TypeScript
  - Chakra UI
+ - TanStack Query
  - firebase storage
 
 ### バックエンド
