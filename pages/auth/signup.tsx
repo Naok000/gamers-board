@@ -10,46 +10,81 @@ import {
   Link,
   Stack,
   useColorModeValue,
+  IconButton,
+  Avatar,
+  AvatarBadge,
 } from '@chakra-ui/react';
-import { User } from '@prisma/client';
 import axios from 'axios';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
+import { getUserSession } from '../../hooks/useQueryUser';
+import { storage } from '../../lib/firebase';
+import { generateFileName } from '../../lib/generateFileName';
 import { currentUserId } from '../../recoil/boardState';
 
 const signup = () => {
+  const [userName, setUserName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [avatarImg, setAvatarImg] = useState<File | null>(null);
   const setUser = useSetRecoilState(currentUserId);
   const router = useRouter();
-  const getUser = async () => {
-    const { data } = await axios.get<Omit<User, 'password'>>(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/session-id`
-    );
-    return data;
+  let url = '';
+
+  const postSignUp = async () => {
+    return await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
+      userName,
+      email,
+      password,
+      url,
+    });
   };
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  const onButtonClick = () => {
+    inputRef.current?.click();
+  };
+
+  const onChangeImageHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files![0]) {
+      setAvatarImg(e.target.files![0]);
+      e.target.value = '';
+    }
+  };
+
   const signupInEmail = async () => {
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
-        email,
-        password,
-      });
+      if (avatarImg) {
+        const fileName = generateFileName(avatarImg.name);
+        const refStorageAvatars = ref(storage, `avatars/${fileName}`);
+
+        await uploadBytes(refStorageAvatars, avatarImg);
+        url = await getDownloadURL(refStorageAvatars);
+        await postSignUp();
+      } else {
+        url = await getDownloadURL(
+          ref(storage, 'default_avatar/AdobeStock_64675209.jpeg')
+        );
+        await postSignUp();
+      }
       setEmail('');
       setPassword('');
-      const user = await getUser();
+      const user = await getUserSession();
       setUser(user);
       await router.push('/board');
     } catch (err) {
       console.log(err);
     }
   };
+
   return (
     <Flex
       minH={'100vh'}
       align={'center'}
       justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}
+      bgGradient='linear(to-l,rgba(7,27,82,1) 0%, rgba(0,128,128,1) 100%)'
     >
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
@@ -62,7 +97,45 @@ const signup = () => {
           p={8}
         >
           <Stack spacing={4}>
-            <FormControl id='email'>
+            <Box textAlign='center'>
+              <FormControl id='avatar'>
+                <FormLabel>Select Avatar</FormLabel>
+                <Input
+                  id='avatar'
+                  type='file'
+                  ref={inputRef}
+                  accept='image/*'
+                  hidden
+                  onChange={onChangeImageHandler}
+                />
+                <IconButton
+                  aria-label='avatar'
+                  icon={
+                    avatarImg ? (
+                      <Avatar bg='teal.500'>
+                        <AvatarBadge boxSize='1.25rem' bg='blue.500' />
+                      </Avatar>
+                    ) : (
+                      <Avatar bg='teal.500'>
+                        <AvatarBadge boxSize='1.25rem' bg='red' />
+                      </Avatar>
+                    )
+                  }
+                  onClick={onButtonClick}
+                />
+              </FormControl>
+            </Box>
+            <FormControl id='userName' isRequired>
+              <FormLabel>User Name</FormLabel>
+              <Input
+                type='userName'
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+                required
+              />
+            </FormControl>
+
+            <FormControl id='email' isRequired>
               <FormLabel>Email address</FormLabel>
               <Input
                 type='email'
@@ -71,7 +144,7 @@ const signup = () => {
                 required
               />
             </FormControl>
-            <FormControl id='password'>
+            <FormControl id='password' isRequired>
               <FormLabel>Password</FormLabel>
               <Input
                 type='password'
@@ -81,11 +154,6 @@ const signup = () => {
               />
             </FormControl>
             <Stack spacing={4}>
-              <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                align={'start'}
-                justify={'space-between'}
-              ></Stack>
               <Button
                 bg={'blue.400'}
                 color={'white'}
@@ -93,11 +161,11 @@ const signup = () => {
                   bg: 'blue.500',
                 }}
                 onClick={signupInEmail}
-                disabled={!email || !password}
+                isDisabled={!userName || !email || !password}
               >
                 Sign up
               </Button>
-              <Stack pt={6}>
+              <Stack pt={3}>
                 <Text align={'center'}>
                   Already a user?{' '}
                   <Link href='/auth/login' color={'blue.400'}>
