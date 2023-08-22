@@ -14,6 +14,8 @@ model User {
   email     String    @unique
   password  String
   userName  String?
+  role      UserRole
+  Avatar    Avatar?
   comments  Comment[]
   posts     Posting[]
 }
@@ -29,12 +31,34 @@ model Comment {
 }
 
 model Posting {
-  id        String    @id
-  createdAt DateTime  @default(now())
-  updatedAt DateTime
-  title     String
-  content   String?
-  userId    String
-  Comment   Comment[]
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String     @id
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime
+  title       String
+  content     String?
+  userId      String
+  gameTitle   String
+  thumbnailId String     @unique
+  Comment     Comment[]
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Thumbnail   Thumbnail?
+}
+
+model Avatar {
+  id           String @id
+  userId       String @unique
+  avatarImgURL String
+  User         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Thumbnail {
+  id        String  @id
+  postingId String  @unique
+  imageURL  String
+  Posting   Posting @relation(fields: [postingId], references: [id], onDelete: Cascade)
+}
+
+enum UserRole {
+  ADMIN
+  USER
 }
