@@ -7,6 +7,7 @@
 - コメント機能
 - アバター画像の設定
 
+
 ## 実装予定機能及び行いたいこと
 - google認証
 - like機能
@@ -24,6 +25,7 @@
 
 ### バックエンド
   - Nest.js - code: https://github.com/Naok000/gamers-restapi
+ - firebase storage
   - Prisma
   - PostgreSQL
 
