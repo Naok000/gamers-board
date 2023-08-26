@@ -45,17 +45,19 @@ model Posting {
 }
 
 model Avatar {
-  id           String @id
-  userId       String @unique
-  avatarImgURL String
-  User         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String @id
+  userId         String @unique
+  avatarImgURL   String
+  avatarFileName String
+  User           User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Thumbnail {
-  id        String  @id
-  postingId String  @unique
-  imageURL  String
-  Posting   Posting @relation(fields: [postingId], references: [id], onDelete: Cascade)
+  id                String  @id
+  postingId         String  @unique
+  imageURL          String
+  thumbnailFileName String
+  Posting           Posting @relation(fields: [postingId], references: [id], onDelete: Cascade)
 }
 
 enum UserRole {
