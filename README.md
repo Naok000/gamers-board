@@ -9,10 +9,13 @@
 
 
 ## 実装予定機能及び行いたいこと
+- アバター画像の変更
+- 退会機能
 - google認証
 - like機能
 - ブックマーク機能
 - 通報機能
+- コメント時に画像投稿ができる機能
 
 ## 使用技術
 ### フロントエンド
@@ -25,7 +28,6 @@
 
 ### バックエンド
   - Nest.js - code: https://github.com/Naok000/gamers-restapi
- - firebase storage
   - Prisma
   - PostgreSQL
 
