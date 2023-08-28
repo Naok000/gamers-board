@@ -21,9 +21,9 @@ import { useQueryUser } from '../../hooks/useQueryUser';
 
 const MyPage = () => {
   const { data: user, status } = useQueryUser();
-  console.log(user);
   const { data: ownPosting } = useQueryOwnPosting();
   if (status === 'loading') return <Spinner />;
+
   return (
     <Layout title='Mypage'>
       <Flex p={4}>
@@ -60,28 +60,35 @@ const MyPage = () => {
           <Heading size='md' p={2}>
             Own Posting
           </Heading>
-          <TableContainer>
-            <Table>
-              <Tbody>
-                {ownPosting &&
-                  ownPosting.map((post) => (
-                    <Tr key={post.id}>
+          {ownPosting?.length !== 0 ? (
+            ownPosting?.map((post) => (
+              <TableContainer key={post.id}>
+                <Table>
+                  <Tbody>
+                    <Tr>
                       <Td>
                         <Heading size='sm'>{post.title}</Heading>
                         <Box color='gray.400'>{post.gameTitle}</Box>
                       </Td>
                       <Td>
-                        <Link href={`board/${post.id}`}>
-                          <Text fontSize={'md'} fontWeight={'semibold'}>
+                        <Flex justifyContent='end'>
+                          <Link href={`board/${post.id}`}>
                             <BsArrowUpRight />
-                          </Text>
-                        </Link>
+                          </Link>
+                        </Flex>
                       </Td>
                     </Tr>
-                  ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                  </Tbody>
+                </Table>
+              </TableContainer>
+            ))
+          ) : (
+            <Flex alignItems='center' justify='center' justifyContent='center'>
+              <Text fontSize='3xl' fontWeight='bold'>
+                No Posting Contents
+              </Text>
+            </Flex>
+          )}
         </Box>
       </Flex>
     </Layout>

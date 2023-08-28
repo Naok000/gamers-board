@@ -1,3 +1,4 @@
+import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -22,13 +23,11 @@ const UserObserver = () => {
 
   useEffect(() => {
     const cookies = parseCookies();
-    console.log(cookies.user);
 
-    if (cookies?.user !== 'undefined') {
+    if (cookies?.user !== undefined) {
       const cookiesUserId: SessionUser = JSON?.parse(cookies.user);
 
       if (cookiesUserId) {
-        console.log('UserObserver', cookiesUserId);
         setUserId(cookiesUserId);
       }
     }
@@ -40,7 +39,8 @@ function WatchUser() {
   const user = useRecoilValue(currentUserId);
 
   useEffect(() => {
-    setCookie(null, 'user', JSON.stringify(user), options);
+    if (user !== undefined)
+      setCookie(null, 'user', JSON.stringify(user), options);
   }, [user]);
   return null;
 }

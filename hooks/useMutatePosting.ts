@@ -1,4 +1,3 @@
-// import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { Posting } from '@prisma/client';
@@ -8,6 +7,8 @@ type posting = {
   id: string;
   title: string;
   content?: string | null;
+  imageURL: string;
+  thumbnailFileName: string;
 };
 
 type comment = {
@@ -29,7 +30,7 @@ export const useMutatePosting = (postingId?: string | string[] | undefined) => {
     },
     {
       onSuccess: (res) => {
-        const previousData = queryClient.getQueryData<Posting[]>(['postings']);
+        const previousData = queryClient.getQueryData<posting[]>(['postings']);
         if (previousData) {
           queryClient.setQueriesData(['postings'], [res, ...previousData]);
         }

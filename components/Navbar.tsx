@@ -41,7 +41,7 @@ const NAV_ITEMS: Array<NavItem> = [
   },
   {
     label: 'Mypage',
-    href: '/mypage',
+    href: '/user',
   },
   {
     label: 'Create Posting',
@@ -59,17 +59,17 @@ export default function WithSubnavigation() {
   const handleLogout = async () => {
     queryClient.removeQueries(['postings']);
     // キャッシュに格納されているユーザー情報をログアウト時に消去する
-    // queryClient.removeQueries(['user']);
-    destroyCookie(null, 'user');
+    queryClient.removeQueries(['user']);
+    destroyCookie(null, 'user', '/');
     setUser(undefined);
     await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`);
     router.push('/board');
   };
 
   return (
-    <Box>
+    <Box mb={0}>
       <Flex
-        bg={useColorModeValue('white', 'gray.800')}
+        bg={useColorModeValue('lightblue', 'gray.800')}
         color={useColorModeValue('gray.600', 'white')}
         minH={'60px'}
         py={{ base: 2 }}
@@ -106,6 +106,13 @@ export default function WithSubnavigation() {
             <DesktopNav />
           </Flex>
         </Flex>
+        {user && user.role === 'ADMIN' ? (
+          <Link href='/admin'>
+            <Button mr='2'>Go Admin</Button>
+          </Link>
+        ) : (
+          <></>
+        )}
 
         {user !== undefined ? (
           <Stack direction={'row'} spacing={7}>

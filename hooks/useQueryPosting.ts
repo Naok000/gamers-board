@@ -1,19 +1,37 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { Comment, Posting, User } from '@prisma/client';
+import { Posting, Thumbnail } from '@prisma/client';
 
-interface userComment extends Comment {
-  user: User;
+type userComment = {
+  id: string;
+  user: { userName: string; avatar: { avatarImgURL: string } };
+  comment: string;
+  timestamp: Date;
+};
+
+type postingById = {
+  id: string;
+  userId: string;
+  gameTitle: string;
+  title: string;
+  content: string;
+  createdAt: Date;
+  user: { userName: string; avatar: { avatarImgURL: string } };
+  thumbnail: { imageURL: string; thumbnailFileName: string };
+};
+
+interface postingWithImage extends Posting {
+  thumbnail: Thumbnail;
 }
 
 export const useQueryPosting = () => {
   const getPosting = async () => {
-    const { data } = await axios.get<Posting[]>(
+    const { data } = await axios.get<postingWithImage[]>(
       `${process.env.NEXT_PUBLIC_API_URL}/board`
     );
     return data;
   };
-  return useQuery<Posting[], Error>({
+  return useQuery<postingWithImage[], Error>({
     queryKey: ['postings'],
     queryFn: getPosting,
     onError: (err: any) => {
@@ -24,12 +42,12 @@ export const useQueryPosting = () => {
 
 export const useQueryPostingId = (postingId: string | string[] | undefined) => {
   const getPostingId = async () => {
-    const { data } = await axios.get<Posting>(
+    const { data } = await axios.get<postingById>(
       `${process.env.NEXT_PUBLIC_API_URL}/board/${postingId}`
     );
     return data;
   };
-  return useQuery<Posting, Error>({
+  return useQuery<postingById, Error>({
     queryKey: ['postings', postingId],
     queryFn: getPostingId,
     onError: (err: any) => {
