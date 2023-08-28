@@ -14,3 +14,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
+
+// storage File ref
+export const storageImageFileRef = `gs://${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}`;

@@ -1,4 +1,4 @@
-const expiersIn = 60 * 10;
+const expiersIn = 60 * 10 * 10;
 
 export const options = {
   maxAge: expiersIn,
