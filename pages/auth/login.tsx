@@ -10,11 +10,11 @@ import {
   useColorModeValue,
   Link,
 } from '@chakra-ui/react';
-import { User } from '@prisma/client';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
+import { getUserSession } from '../../hooks/useQueryUser';
 import { currentUserId } from '../../recoil/boardState';
 
 const Login = () => {
@@ -22,12 +22,6 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const getUser = async () => {
-    const { data } = await axios.get<Omit<User, 'password'>>(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/session-id`
-    );
-    return data;
-  };
   const setUserId = useSetRecoilState(currentUserId);
   const signInEmail = async () => {
     try {
@@ -37,7 +31,7 @@ const Login = () => {
       });
       setEmail('');
       setPassword('');
-      const user = await getUser();
+      const user = await getUserSession();
       setUserId(user);
       await router.push('/board');
     } catch (err) {
@@ -49,7 +43,7 @@ const Login = () => {
       minH={'100vh'}
       align={'center'}
       justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}
+      bgGradient='linear(to-l,rgba(7,27,82,1) 0%, rgba(0,128,128,1) 100%)'
     >
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
@@ -62,7 +56,7 @@ const Login = () => {
           p={8}
         >
           <Stack spacing={4}>
-            <FormControl id='email'>
+            <FormControl id='email' isRequired>
               <FormLabel>Email address</FormLabel>
               <Input
                 type='email'
@@ -71,7 +65,7 @@ const Login = () => {
                 required
               />
             </FormControl>
-            <FormControl id='password'>
+            <FormControl id='password' isRequired>
               <FormLabel>Password</FormLabel>
               <Input
                 type='password'
@@ -98,7 +92,7 @@ const Login = () => {
                   bg: 'blue.500',
                 }}
                 onClick={signInEmail}
-                disabled={!email || !password}
+                isDisabled={!email || !password}
               >
                 Sign in
               </Button>

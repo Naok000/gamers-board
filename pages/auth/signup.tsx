@@ -25,22 +25,17 @@ import { generateFileName } from '../../lib/generateFileName';
 import { currentUserId } from '../../recoil/boardState';
 
 const signup = () => {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [avatarImg, setAvatarImg] = useState<File | null>(null);
-  const setUser = useSetRecoilState(currentUserId);
-  const router = useRouter();
-  let url = '';
+  const [signUpUser, setSignUpUser] = useState({
+    userName: '',
+    email: '',
+    password: '',
+    url: '',
+    fileName: '',
+  });
 
-  const postSignUp = async () => {
-    return await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/signup`, {
-      userName,
-      email,
-      password,
-      url,
-    });
-  };
+  const [avatarImg, setAvatarImg] = useState<File | null>(null);
+  const setUserId = useSetRecoilState(currentUserId);
+  const router = useRouter();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const onButtonClick = () => {
@@ -55,24 +50,41 @@ const signup = () => {
   };
 
   const signupInEmail = async () => {
+    const postSignUp = async () => {
+      return await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
+        {
+          ...signUpUser,
+        }
+      );
+    };
     try {
       if (avatarImg) {
-        const fileName = generateFileName(avatarImg.name);
-        const refStorageAvatars = ref(storage, `avatars/${fileName}`);
+        signUpUser.fileName = generateFileName(avatarImg.name);
+        const refStorageAvatars = ref(
+          storage,
+          `avatars/${signUpUser.fileName}`
+        );
 
         await uploadBytes(refStorageAvatars, avatarImg);
-        url = await getDownloadURL(refStorageAvatars);
+        signUpUser.url = await getDownloadURL(refStorageAvatars);
+
         await postSignUp();
       } else {
-        url = await getDownloadURL(
+        signUpUser.url = await getDownloadURL(
           ref(storage, 'default_avatar/AdobeStock_64675209.jpeg')
         );
         await postSignUp();
       }
-      setEmail('');
-      setPassword('');
+      setSignUpUser({
+        userName: '',
+        email: '',
+        password: '',
+        url: '',
+        fileName: '',
+      });
       const user = await getUserSession();
-      setUser(user);
+      setUserId(user);
       await router.push('/board');
     } catch (err) {
       console.log(err);
@@ -129,8 +141,10 @@ const signup = () => {
               <FormLabel>User Name</FormLabel>
               <Input
                 type='userName'
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
+                value={signUpUser.userName}
+                onChange={(e) =>
+                  setSignUpUser({ ...signUpUser, userName: e.target.value })
+                }
                 required
               />
             </FormControl>
@@ -139,8 +153,10 @@ const signup = () => {
               <FormLabel>Email address</FormLabel>
               <Input
                 type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={signUpUser.email}
+                onChange={(e) =>
+                  setSignUpUser({ ...signUpUser, email: e.target.value })
+                }
                 required
               />
             </FormControl>
@@ -148,8 +164,10 @@ const signup = () => {
               <FormLabel>Password</FormLabel>
               <Input
                 type='password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={signUpUser.password}
+                onChange={(e) =>
+                  setSignUpUser({ ...signUpUser, password: e.target.value })
+                }
                 required
               />
             </FormControl>
@@ -161,7 +179,11 @@ const signup = () => {
                   bg: 'blue.500',
                 }}
                 onClick={signupInEmail}
-                isDisabled={!userName || !email || !password}
+                isDisabled={
+                  !signUpUser.userName ||
+                  !signUpUser.email ||
+                  !signUpUser.password
+                }
               >
                 Sign up
               </Button>
