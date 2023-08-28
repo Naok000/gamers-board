@@ -1,12 +1,18 @@
 import {
+  Avatar,
   Box,
-  Container,
+  Button,
+  Center,
   Flex,
+  FormControl,
   Heading,
   HStack,
+  Img,
+  Spacer,
   Spinner,
   Stack,
   Text,
+  Textarea,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -17,6 +23,8 @@ import {
 import { ArrowBackIcon, ChatIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useMutatePosting } from '../../hooks/useMutatePosting';
 import { useQueryUser } from '../../hooks/useQueryUser';
+import { Layout } from '../../components/Layout';
+import { MdClose, MdOutlinePostAdd } from 'react-icons/md';
 
 const DetailPostingPage = () => {
   const router = useRouter();
@@ -25,15 +33,19 @@ const DetailPostingPage = () => {
   const [comment, setComment] = useState('');
   const { commentPostingMutation, deletePostingMutation } =
     useMutatePosting(postingId);
-  const { data: posting, status } = useQueryPostingId(postingId);
+  const { data: posting } = useQueryPostingId(postingId);
   const { data: comments } = useQueryComment(postingId);
-  const { data: user } = useQueryUser();
-  if (status === 'loading') return <Spinner />;
+  const { data: user, status } = useQueryUser();
+  if (status === 'error') {
+    router.push('/auth/login');
+  } else if (status === 'loading') {
+    return <Spinner />;
+  }
 
-  const newComment = (e: { preventDefault: () => void }) => {
-    // e.preventDefault();
+  const newComment = () => {
     commentPostingMutation.mutate({ comment });
     setComment('');
+    router.reload();
   };
 
   const deletePosting = (id: string) => {
@@ -41,75 +53,164 @@ const DetailPostingPage = () => {
     router.push('/board');
   };
 
-  // console.log(comments);
-  // console.log(user);
-
   return (
     <>
       {posting && (
-        <Container maxW={'7xl'} p='12'>
-          <ArrowBackIcon onClick={() => router.push('/board')} />
-          <span>Back Main Board</span>
-          <Box maxW='md' bg='gray.100' mt={2}>
-            <Box pb={1}>
-              <Heading color={'black'} fontSize={'h1'} noOfLines={1}>
-                {posting.title}
-              </Heading>
-              <Text color={'gray.500'} noOfLines={2}>
-                {posting.content}
-              </Text>
-            </Box>
-            <HStack borderTop={'1px'} color='black' pt={2} pb={1}>
-              <Flex alignItems='center' justifyContent={'end'}>
-                <ChatIcon
-                  onClick={() => setOpenComments(!openComments)}
-                  pt={1}
-                />
-              </Flex>
-              <Flex>
-                {posting.userId === user?.id ? (
-                  <DeleteIcon onClick={() => deletePosting(posting.id)} />
-                ) : (
-                  <></>
-                )}
-              </Flex>
-            </HStack>
-          </Box>
-
-          <Stack>
-            {comments &&
-              comments.map((com) => (
-                <Box key={com.id}>
-                  <Box>
-                    <span>@{com?.userId}</span>
-                  </Box>
-                  <Box>
-                    <span>{com.comment}</span>
-                  </Box>
-                  <span>{new Date(com.timestamp).toLocaleString()}</span>
-                </Box>
-              ))}
-          </Stack>
-          {openComments && (
-            <>
-              <form onSubmit={newComment}>
-                <div>
-                  <input
-                    type='text'
-                    placeholder='Type new comment...'
-                    value={comment}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setComment(e.target.value)
-                    }
+        <Layout title={posting.title}>
+          <Box maxW={'5xl'} p='12'>
+            <Button
+              leftIcon={<ArrowBackIcon />}
+              onClick={() => router.push('/board')}
+              variant='link'
+              colorScheme='whiteAlpha'
+            >
+              Back Main Board
+            </Button>
+            <Center py={6}>
+              <Stack
+                borderWidth='1px'
+                borderRadius='lg'
+                w={{ sm: '100%', md: '5xl' }}
+                height={{ sm: '476px', md: '20rem' }}
+                direction={{ base: 'column', md: 'row' }}
+                boxShadow={'2xl'}
+                bg='white'
+                p={4}
+              >
+                <Flex flex={1} bg='blue.200'>
+                  <Img
+                    objectFit='cover'
+                    boxSize='100%'
+                    src={posting.thumbnail.imageURL}
+                    alt='thumbnail'
                   />
-                  <button disabled={!comment} type='submit'>
-                    submit
-                  </button>
-                </div>
-              </form>
-            </>
-          )}
-        </Container>
+                </Flex>
+                <Stack
+                  flex={1}
+                  flexDirection='column'
+                  justifyContent='center'
+                  alignItems='center'
+                  p={1}
+                  pt={2}
+                >
+                  <Heading fontSize={'2xl'} fontFamily={'body'}>
+                    {posting.title}
+                  </Heading>
+                  <Text fontWeight={600} color='gray.500' size='sm' mb={4}>
+                    @{posting.gameTitle}
+                  </Text>
+                  <Text textAlign={'center'} px={3}>
+                    {posting.content}
+                  </Text>
+                  <HStack>
+                    <Avatar src={posting.user.avatar.avatarImgURL} />
+                    <Stack>
+                      <Text fontWeight='600'>{posting.user.userName}</Text>
+                      <Text color='gray.500'>
+                        {new Date(posting.createdAt).toLocaleDateString(
+                          'en-US'
+                        )}
+                      </Text>
+                    </Stack>
+                  </HStack>
+
+                  <HStack color='black' pt={2} pb={2}>
+                    <Flex alignItems='center'>
+                      <Button
+                        leftIcon={<ChatIcon pt={1} />}
+                        onClick={() => setOpenComments(!openComments)}
+                        colorScheme='blue'
+                        size='sm'
+                      >
+                        Comment
+                      </Button>
+                    </Flex>
+                    <Flex>
+                      {posting.userId === user?.id ? (
+                        <Button
+                          leftIcon={<DeleteIcon />}
+                          onClick={() => deletePosting(posting.id)}
+                          mx={1}
+                          size='sm'
+                          colorScheme='red'
+                          variant='solid'
+                        >
+                          Delete
+                        </Button>
+                      ) : (
+                        <></>
+                      )}
+                    </Flex>
+                  </HStack>
+                </Stack>
+              </Stack>
+            </Center>
+
+            <Stack overflowY={'scroll'} h='540px'>
+              {comments &&
+                comments.map((com) => (
+                  <Box
+                    key={com.id}
+                    maxW={'5xl'}
+                    bg='white'
+                    p={2}
+                    borderRadius='lg'
+                  >
+                    <HStack>
+                      <Avatar src={com.user.avatar.avatarImgURL} />
+                      <Stack>
+                        <Heading size='sm' fontWeight={'medium'}>
+                          @{com.user.userName}
+                        </Heading>
+                        <Box>{com.comment}</Box>
+                      </Stack>
+                      <Spacer />
+                      <Box color='gray.500'>
+                        {new Date(com.timestamp).toLocaleString()}
+                      </Box>
+                    </HStack>
+                  </Box>
+                ))}
+            </Stack>
+            {openComments && (
+              <Stack bg='white' p={2} borderRadius='lg'>
+                <FormControl id='comment'>
+                  <Box>
+                    <Textarea
+                      name='comment'
+                      placeholder='Enter new comment...'
+                      value={comment}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                        setComment(e.target.value)
+                      }
+                    />
+                  </Box>
+                </FormControl>
+                <HStack>
+                  <Spacer />
+                  <Button
+                    leftIcon={<MdOutlinePostAdd />}
+                    isDisabled={!comment}
+                    type='submit'
+                    colorScheme='teal'
+                    onClick={() => newComment()}
+                  >
+                    post
+                  </Button>
+                  <Button
+                    leftIcon={<MdClose />}
+                    onClick={() => {
+                      setOpenComments(!openComments);
+                      setComment('');
+                    }}
+                  >
+                    Close
+                  </Button>
+                </HStack>
+              </Stack>
+            )}
+          </Box>
+        </Layout>
       )}
     </>
   );
