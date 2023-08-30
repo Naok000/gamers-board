@@ -2,21 +2,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { Posting } from '@prisma/client';
 import { useRouter } from 'next/router';
+import { COMMENT, POSTING } from './queryKey';
+import { posting, comment } from './types/queryType';
 
-type posting = {
-  id: string;
-  title: string;
-  content?: string | null;
-  imageURL: string;
-  thumbnailFileName: string;
-};
-
-type comment = {
-  id: string;
-  comment: string;
-};
-
-export const useMutatePosting = (postingId?: string | string[] | undefined) => {
+export const useMutatePosting: any = (
+  postingId?: string | string[] | undefined
+) => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -30,9 +21,9 @@ export const useMutatePosting = (postingId?: string | string[] | undefined) => {
     },
     {
       onSuccess: (res) => {
-        const previousData = queryClient.getQueryData<posting[]>(['postings']);
+        const previousData = queryClient.getQueryData<posting[]>([POSTING]);
         if (previousData) {
-          queryClient.setQueriesData(['postings'], [res, ...previousData]);
+          queryClient.setQueriesData([POSTING], [res, ...previousData]);
         }
       },
       onError: (err: any) => {
@@ -52,9 +43,9 @@ export const useMutatePosting = (postingId?: string | string[] | undefined) => {
     },
     {
       onSuccess: (res) => {
-        const previousData = queryClient.getQueryData<Comment[]>(['comments']);
+        const previousData = queryClient.getQueryData<Comment[]>([COMMENT]);
         if (previousData) {
-          queryClient.setQueriesData(['comments'], [res, ...previousData]);
+          queryClient.setQueriesData([COMMENT], [res, ...previousData]);
         }
       },
       onError: (err: any) => {
@@ -72,10 +63,10 @@ export const useMutatePosting = (postingId?: string | string[] | undefined) => {
     },
     {
       onSuccess: (_, variables) => {
-        const previousData = queryClient.getQueryData<Posting[]>(['postings']);
+        const previousData = queryClient.getQueryData<Posting[]>([POSTING]);
         if (previousData) {
           queryClient.setQueryData(
-            ['postings'],
+            [POSTING],
             previousData.filter((posting) => posting.id !== variables)
           );
         }

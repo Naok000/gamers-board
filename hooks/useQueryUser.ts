@@ -2,13 +2,8 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { User } from '@prisma/client';
-
-type userProfile = {
-  id: string;
-  userName: string;
-  createdAt: Date;
-  avatar: { avatarImgURL: string };
-};
+import { userProfile } from './types/queryType';
+import { USER } from './queryKey';
 
 export const getUserSession = async () => {
   const { data } = await axios.get<Omit<User, 'password'>>(
@@ -27,7 +22,7 @@ export const useQueryUser = () => {
   };
 
   return useQuery<userProfile, Error>({
-    queryKey: ['user'],
+    queryKey: [USER],
     queryFn: getUser,
     onError: (err: any) => {
       if (err.response.status === 401 || err.response.status === 403)

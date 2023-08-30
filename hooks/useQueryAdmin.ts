@@ -2,6 +2,7 @@ import { Posting, User } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { POSTING_LIST, USER_LIST } from './queryKey';
 
 interface userPostingList extends Posting {
   user: User;
@@ -17,7 +18,7 @@ export const useQueryAdminUser = () => {
   };
 
   return useQuery<Omit<User[], 'password'>, Error>({
-    queryKey: ['userList'],
+    queryKey: [USER_LIST],
     queryFn: getAllUser,
     onError: (err: any) => {
       if (err.response.status === 401 || err.response.status === 403)
@@ -36,7 +37,7 @@ export const useQueryAdminPosting = () => {
   };
 
   return useQuery<userPostingList[], Error>({
-    queryKey: ['postingList'],
+    queryKey: [POSTING_LIST],
     queryFn: getAllPosting,
     onError: (err: any) => {
       if (err.response.status === 401 || err.response.status === 403)

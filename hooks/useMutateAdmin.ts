@@ -2,6 +2,7 @@ import { Posting, User } from '@prisma/client';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { POSTING_LIST, USER_LIST } from './queryKey';
 
 export const useMutateAdmin = () => {
   const queryClient = useQueryClient();
@@ -15,10 +16,10 @@ export const useMutateAdmin = () => {
     },
     {
       onSuccess: (_, variables) => {
-        const previousData = queryClient.getQueryData<User[]>(['userList']);
+        const previousData = queryClient.getQueryData<User[]>([USER_LIST]);
         if (previousData) {
           queryClient.setQueryData(
-            ['userList'],
+            [USER_LIST],
             previousData.filter((user) => user.id !== variables)
           );
         }
@@ -41,11 +42,11 @@ export const useMutateAdmin = () => {
     {
       onSuccess: (_, variables) => {
         const previousData = queryClient.getQueryData<Posting[]>([
-          'postingList',
+          POSTING_LIST,
         ]);
         if (previousData) {
           queryClient.setQueryData(
-            ['postingList'],
+            [POSTING_LIST],
             previousData.filter((posting) => posting.id !== variables)
           );
         }
