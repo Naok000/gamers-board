@@ -1,28 +1,8 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
-import { Posting, Thumbnail } from '@prisma/client';
-
-type userComment = {
-  id: string;
-  user: { userName: string; avatar: { avatarImgURL: string } };
-  comment: string;
-  timestamp: Date;
-};
-
-type postingById = {
-  id: string;
-  userId: string;
-  gameTitle: string;
-  title: string;
-  content: string;
-  createdAt: Date;
-  user: { userName: string; avatar: { avatarImgURL: string } };
-  thumbnail: { imageURL: string; thumbnailFileName: string };
-};
-
-interface postingWithImage extends Posting {
-  thumbnail: Thumbnail;
-}
+import { Posting } from '@prisma/client';
+import { COMMENT, OWN_POSTING, POSTING } from './queryKey';
+import { postingById, postingWithImage, userComment } from './types/queryType';
 
 export const useQueryPosting = () => {
   const getPosting = async () => {
@@ -32,7 +12,7 @@ export const useQueryPosting = () => {
     return data;
   };
   return useQuery<postingWithImage[], Error>({
-    queryKey: ['postings'],
+    queryKey: [POSTING],
     queryFn: getPosting,
     onError: (err: any) => {
       console.log(err);
@@ -48,7 +28,7 @@ export const useQueryPostingId = (postingId: string | string[] | undefined) => {
     return data;
   };
   return useQuery<postingById, Error>({
-    queryKey: ['postings', postingId],
+    queryKey: [POSTING, postingId],
     queryFn: getPostingId,
     onError: (err: any) => {
       console.log(err);
@@ -64,7 +44,7 @@ export const useQueryComment = (postingId: string | string[] | undefined) => {
     return data;
   };
   return useQuery<userComment[], Error>({
-    queryKey: ['comments', postingId],
+    queryKey: [COMMENT, postingId],
     queryFn: getComment,
     onError: (err: any) => {
       console.log(err);
@@ -80,7 +60,7 @@ export const useQueryOwnPosting = () => {
     return data;
   };
   return useQuery<Posting[], Error>({
-    queryKey: ['own_postings'],
+    queryKey: [OWN_POSTING],
     queryFn: getOwnPosting,
     onError: (err: any) => {
       console.log(err);
