@@ -6,7 +6,7 @@ const BoardTopPage = () => {
   const router = useRouter();
   return (
     <Layout title='Board Top'>
-      <Container maxW={'5xl'}>
+      <Container w={{ base: '', sm: 'md', md: 'xl' }}>
         <Stack
           textAlign={'center'}
           align={'center'}
@@ -15,7 +15,7 @@ const BoardTopPage = () => {
         >
           <Heading
             fontWeight={600}
-            fontSize={{ base: '3xl', sm: '4xl', md: '6xl' }}
+            fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
             lineHeight={'110%'}
           >
             Welcome to{' '}
