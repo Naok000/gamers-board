@@ -38,7 +38,7 @@ const BoardPage = () => {
           />
         </Center>
       </Box>
-      <Wrap>
+      <Wrap justify={{ base: 'center', sm: 'center', md: 'start' }}>
         {postings &&
           postings
             .filter((post) => {
@@ -75,7 +75,7 @@ const BoardPage = () => {
                       {posting.title}
                     </Heading>
                     <Text color={'gray.500'} noOfLines={2}>
-                      {posting.content}
+                      {posting.content || 'No description'}
                     </Text>
                   </Box>
                   <HStack borderTop={'1px'} color='black'>

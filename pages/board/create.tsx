@@ -13,6 +13,7 @@ import {
   IconButton,
   HStack,
   Text,
+  FormHelperText,
 } from '@chakra-ui/react';
 import { useMutatePosting } from '../../hooks/useMutatePosting';
 import { ChangeEvent, useRef, useState } from 'react';
@@ -46,7 +47,7 @@ const CreatePosting = () => {
     }
   };
 
-  const addPosting = () => {
+  const addPosting = async () => {
     if (postingThumbnail) {
       const fileName = generateFileName(postingThumbnail.name);
       const storageRef = ref(storage, `images/${fileName}`);
@@ -71,6 +72,16 @@ const CreatePosting = () => {
           });
         }
       );
+    } else {
+      await getDownloadURL(
+        ref(storage, `default_images/${newPosting.gameTitle}.jpg`)
+      ).then(async (url) => {
+        createPostingMutation.mutate({
+          ...newPosting,
+          imageURL: url,
+          thumbnailFileName: `${newPosting.gameTitle}`,
+        });
+      });
     }
 
     setPosting({
@@ -86,9 +97,15 @@ const CreatePosting = () => {
   return (
     <Layout title='Create Posting'>
       <Flex minH={'100vh'} align={'center'} justify={'center'}>
-        <Stack spacing={8} mx={'auto'} maxW={'5xl'} py={10} px={6}>
+        <Stack
+          spacing={8}
+          mx={'auto'}
+          w={{ base: 'sm', sm: 'lg', md: 'xl', xl: '3xl' }}
+          py={10}
+          px={6}
+        >
           <Box
-            w='2xl'
+            w={{ base: 'none', sm: 'md', md: 'xl', lg: '2xl', xl: '3xl' }}
             rounded={'lg'}
             bg={useColorModeValue('white', 'gray.700')}
             boxShadow={'lg'}
@@ -115,6 +132,10 @@ const CreatePosting = () => {
                   />
                   <Text>{postingThumbnail?.name.toString()}</Text>
                 </HStack>
+                <FormHelperText>
+                  If no image file is selected, the prepared thumbnail will be
+                  used
+                </FormHelperText>
               </FormControl>
               <FormControl id='gameTitle' isRequired>
                 <FormLabel mt={2}>Game Title</FormLabel>
@@ -158,7 +179,13 @@ const CreatePosting = () => {
                 />
               </FormControl>
 
-              <Button onClick={() => addPosting()}>Create Posting</Button>
+              <Button
+                isDisabled={!newPosting.gameTitle || !newPosting.title}
+                colorScheme='teal'
+                onClick={() => addPosting()}
+              >
+                Create Posting
+              </Button>
             </Stack>
           </Box>
         </Stack>
