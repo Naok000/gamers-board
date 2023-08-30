@@ -26,7 +26,11 @@ const MyPage = () => {
 
   return (
     <Layout title='Mypage'>
-      <Flex p={4}>
+      <Flex
+        p={4}
+        flex={{ base: 0, md: 'auto' }}
+        flexDir={{ base: 'column', md: 'row' }}
+      >
         {user && (
           <Center py={6} alignItems='start'>
             <Box
@@ -56,7 +60,15 @@ const MyPage = () => {
             </Box>
           </Center>
         )}
-        <Box w='80%' m={6} p={4} boxShadow='2xl' bg='white' rounded='lg'>
+        <Box
+          w={{ base: '320px', sm: 'md', lg: '3xl' }}
+          justifyContent={{ base: 'center' }}
+          m={6}
+          p={4}
+          boxShadow='2xl'
+          bg='white'
+          rounded='lg'
+        >
           <Heading size='md' p={2}>
             Own Posting
           </Heading>
