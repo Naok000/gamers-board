@@ -123,7 +123,7 @@ const Login = () => {
                 }}
                 onClick={testSignIn}
               >
-                Gest Login
+                Guest Login
               </Button>
             </Stack>
           </Stack>
