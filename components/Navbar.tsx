@@ -27,6 +27,12 @@ import axios from 'axios';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { currentUserId } from '../recoil/boardState';
 import { destroyCookie } from 'nookies';
+import {
+  MdOutlineLogout,
+  MdOutlineLogin,
+  MdAppRegistration,
+  MdAdminPanelSettings,
+} from 'react-icons/md';
 
 interface NavItem {
   label: string;
@@ -63,7 +69,7 @@ export default function WithSubnavigation() {
     destroyCookie(null, 'user', '/');
     setUser(undefined);
     await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`);
-    router.push('/board');
+    await router.push('/board');
   };
 
   return (
@@ -95,7 +101,10 @@ export default function WithSubnavigation() {
         </Flex>
         <Flex flex={{ base: 1 }} justify={{ base: 'center', md: 'start' }}>
           <Text
-            textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
+            textAlign={useBreakpointValue({
+              base: 'center',
+              md: 'left',
+            })}
             fontFamily={'heading'}
             color={useColorModeValue('gray.800', 'white')}
           >
@@ -108,15 +117,30 @@ export default function WithSubnavigation() {
         </Flex>
         {user && user.role === 'ADMIN' ? (
           <Link href='/admin'>
-            <Button mr='2'>Go Admin</Button>
+            <Button leftIcon={<MdAdminPanelSettings />} mr='2'>
+              Admin
+            </Button>
           </Link>
         ) : (
           <></>
         )}
 
         {user !== undefined ? (
-          <Stack direction={'row'} spacing={7}>
-            <Button onClick={handleLogout}>Logout</Button>
+          <Stack
+            flex={{ base: 1, md: 0 }}
+            justify={'flex-end'}
+            direction={'row'}
+            spacing={8}
+          >
+            <Button
+              leftIcon={<MdOutlineLogout />}
+              fontSize='sm'
+              variant={'link'}
+              onClick={handleLogout}
+              colorScheme='orange'
+            >
+              Logout
+            </Button>
           </Stack>
         ) : (
           <Stack
@@ -126,15 +150,18 @@ export default function WithSubnavigation() {
             spacing={6}
           >
             <Button
+              leftIcon={<MdOutlineLogin />}
               as={'a'}
               fontSize={'sm'}
               fontWeight={400}
               variant={'link'}
               href={'/auth/login'}
+              colorScheme={'teal'}
             >
               Login
             </Button>
             <Button
+              leftIcon={<MdAppRegistration />}
               as={'a'}
               display={{ base: 'none', md: 'inline-flex' }}
               fontSize={'sm'}
