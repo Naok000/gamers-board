@@ -21,8 +21,25 @@ const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const setUserId = useSetRecoilState(currentUserId);
+
+  const testUserEmail: string = 'testUser@test.com';
+  const testUserPassword: string = 'uidjopDHJilkjfskkkd84352';
+
+  const testSignIn = async () => {
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+        email: testUserEmail,
+        password: testUserPassword,
+      });
+      const user = await getUserSession();
+      setUserId(user);
+      await router.push('/board');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const signInEmail = async () => {
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
@@ -47,7 +64,9 @@ const Login = () => {
     >
       <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
         <Stack align={'center'}>
-          <Heading fontSize={'4xl'}>Sign in to your account</Heading>
+          <Heading color={'black'} fontSize={'4xl'}>
+            Sign in to your account
+          </Heading>
         </Stack>
         <Box
           rounded={'lg'}
@@ -95,6 +114,16 @@ const Login = () => {
                 isDisabled={!email || !password}
               >
                 Sign in
+              </Button>
+              <Button
+                bg={'orange.400'}
+                color={'white'}
+                _hover={{
+                  bg: 'orange.500',
+                }}
+                onClick={testSignIn}
+              >
+                Gest Login
               </Button>
             </Stack>
           </Stack>
