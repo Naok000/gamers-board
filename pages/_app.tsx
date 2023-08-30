@@ -8,6 +8,7 @@ import { RecoilRoot, useRecoilValue, useSetRecoilState } from 'recoil';
 import { currentUserId, SessionUser } from '../recoil/boardState';
 import { parseCookies, setCookie } from 'nookies';
 import { options } from '../lib/nookiesOption';
+import { theme } from '../styles/theme';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,7 +59,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <RecoilRoot>
         <QueryClientProvider client={queryClient}>
           <Component {...pageProps} />

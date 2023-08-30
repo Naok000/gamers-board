@@ -15,9 +15,7 @@ export const Layout: FC<Props> = ({ children, title = '' }) => {
         <title>{title}</title>
       </Head>
       <WithSubnavigation />
-      <Box bgGradient='linear(to-l,rgba(7,27,82,1) 0%, rgba(0,128,128,1) 100%)'>
-        {children}
-      </Box>
+      <Box>{children}</Box>
     </Box>
   );
 };

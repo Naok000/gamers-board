@@ -71,7 +71,7 @@ const DetailPostingPage = () => {
                 borderWidth='1px'
                 borderRadius='lg'
                 w={{ sm: '100%', md: '5xl' }}
-                height={{ sm: '476px', md: '20rem' }}
+                height={{ sm: '2xl', md: '22rem' }}
                 direction={{ base: 'column', md: 'row' }}
                 boxShadow={'2xl'}
                 bg='white'
@@ -146,7 +146,7 @@ const DetailPostingPage = () => {
               </Stack>
             </Center>
 
-            <Stack overflowY={'scroll'} h='540px'>
+            <Stack overflowY={'auto'}>
               {comments &&
                 comments.map((com) => (
                   <Box
@@ -173,7 +173,7 @@ const DetailPostingPage = () => {
                 ))}
             </Stack>
             {openComments && (
-              <Stack bg='white' p={2} borderRadius='lg'>
+              <Stack bg='white' mt={2} p={2} borderRadius='lg'>
                 <FormControl id='comment'>
                   <Box>
                     <Textarea
