@@ -25,6 +25,8 @@ import { useMutatePosting } from '../../hooks/useMutatePosting';
 import { useQueryUser } from '../../hooks/useQueryUser';
 import { Layout } from '../../components/Layout';
 import { MdClose, MdOutlinePostAdd } from 'react-icons/md';
+import { deleteObject, ref } from 'firebase/storage';
+import { storage, storageImageFileRef } from '../../lib/firebase';
 
 const DetailPostingPage = () => {
   const router = useRouter();
@@ -48,9 +50,28 @@ const DetailPostingPage = () => {
     router.reload();
   };
 
-  const deletePosting = (id: string) => {
-    deletePostingMutation.mutate(id);
-    router.push('/board');
+  const deletePosting = async (id: string) => {
+    await deletePostingMutation.mutate(id);
+    if (
+      !ref(
+        storage,
+        storageImageFileRef + `/default_images/${posting?.gameTitle}.jpg`
+      )
+    )
+      await deleteObject(
+        ref(
+          storage,
+          storageImageFileRef +
+            `/images/${posting?.thumbnail.thumbnailFileName}`
+        )
+      )
+        .then(() => {
+          console.log('File deleted successfully');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    await router.push('/board');
   };
 
   return (
