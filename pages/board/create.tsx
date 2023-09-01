@@ -64,7 +64,7 @@ const CreatePosting = () => {
         },
         async () => {
           await getDownloadURL(storageRef).then(async (url) => {
-            createPostingMutation.mutate({
+            await createPostingMutation.mutate({
               ...newPosting,
               imageURL: url,
               thumbnailFileName: fileName,
@@ -76,7 +76,7 @@ const CreatePosting = () => {
       await getDownloadURL(
         ref(storage, `default_images/${newPosting.gameTitle}.jpg`)
       ).then(async (url) => {
-        createPostingMutation.mutate({
+        await createPostingMutation.mutate({
           ...newPosting,
           imageURL: url,
           thumbnailFileName: `${newPosting.gameTitle}`,
