@@ -1,3 +1,4 @@
+// prettierを有効にするため
 {
   "extends": "next/core-web-vitals"
 }
