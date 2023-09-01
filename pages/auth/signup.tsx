@@ -13,6 +13,7 @@ import {
   IconButton,
   Avatar,
   AvatarBadge,
+  useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -36,6 +37,7 @@ const signup = () => {
   const [avatarImg, setAvatarImg] = useState<File | null>(null);
   const setUserId = useSetRecoilState(currentUserId);
   const router = useRouter();
+  const toast = useToast();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const onButtonClick = () => {
@@ -85,6 +87,13 @@ const signup = () => {
       });
       const user = await getUserSession();
       setUserId(user);
+      toast({
+        title: 'Account created.',
+        description: "We've created your account for you.",
+        status: 'success',
+        duration: 9000,
+        isClosable: true,
+      });
       await router.push('/board');
     } catch (err) {
       console.log(err);
