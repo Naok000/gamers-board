@@ -30,6 +30,7 @@ export const useQueryPostingId = (postingId: string | string[] | undefined) => {
   return useQuery<postingById, Error>({
     queryKey: [POSTING, postingId],
     queryFn: getPostingId,
+    enabled: !!postingId,
     onError: (err: any) => {
       console.log(err);
     },
