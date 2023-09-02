@@ -44,8 +44,8 @@ const DetailPostingPage = () => {
     return <Spinner />;
   }
 
-  const newComment = () => {
-    commentPostingMutation.mutate({ comment });
+  const newComment = async () => {
+    await commentPostingMutation.mutate({ comment });
     setComment('');
     router.reload();
   };
