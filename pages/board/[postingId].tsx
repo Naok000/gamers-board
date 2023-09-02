@@ -214,7 +214,7 @@ const DetailPostingPage = () => {
                     isDisabled={!comment}
                     type='submit'
                     colorScheme='teal'
-                    onClick={() => newComment()}
+                    onClick={newComment}
                   >
                     post
                   </Button>
