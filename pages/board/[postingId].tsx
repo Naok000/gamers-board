@@ -36,7 +36,7 @@ const DetailPostingPage = () => {
   const { commentPostingMutation, deletePostingMutation } =
     useMutatePosting(postingId);
   const { data: posting } = useQueryPostingId(postingId);
-  const { data: comments } = useQueryComment(postingId);
+  const { data: comments, isSuccess } = useQueryComment(postingId);
   const { data: user, status } = useQueryUser();
   if (status === 'error') {
     router.push('/auth/login');
@@ -44,8 +44,8 @@ const DetailPostingPage = () => {
     return <Spinner />;
   }
 
-  const newComment = async () => {
-    await commentPostingMutation.mutate({ comment });
+  const newComment = () => {
+    commentPostingMutation.mutate({ comment });
     setComment('');
     router.reload();
   };
@@ -168,7 +168,7 @@ const DetailPostingPage = () => {
             </Center>
 
             <Stack overflowY={'auto'}>
-              {comments &&
+              {isSuccess === true &&
                 comments.map((com) => (
                   <Box
                     key={com.id}
