@@ -44,8 +44,8 @@ const DetailPostingPage = () => {
     return <Spinner />;
   }
 
-  const newComment = () => {
-    commentPostingMutation.mutate({ comment });
+  const newComment = async () => {
+    await commentPostingMutation.mutate({ comment });
     setComment('');
     router.reload();
   };
@@ -92,7 +92,7 @@ const DetailPostingPage = () => {
                 borderWidth='1px'
                 borderRadius='lg'
                 w={{ sm: '100%', md: '5xl' }}
-                height={{ sm: '2xl', md: '22rem' }}
+                height={{ sm: '2xl', md: '20rem' }}
                 direction={{ base: 'column', md: 'row' }}
                 boxShadow={'2xl'}
                 bg='white'
