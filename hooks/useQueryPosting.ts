@@ -14,6 +14,7 @@ export const useQueryPosting = () => {
   return useQuery<postingWithImage[], Error>({
     queryKey: [POSTING],
     queryFn: getPosting,
+    keepPreviousData: true,
     onError: (err: any) => {
       console.log(err);
     },
@@ -30,6 +31,7 @@ export const useQueryPostingId = (postingId: string | string[] | undefined) => {
   return useQuery<postingById, Error>({
     queryKey: [POSTING, postingId],
     queryFn: getPostingId,
+    enabled: !!postingId,
     onError: (err: any) => {
       console.log(err);
     },
@@ -47,6 +49,7 @@ export const useQueryComment = (postingId: string | string[] | undefined) => {
     queryKey: [COMMENT, postingId],
     queryFn: getComment,
     enabled: !!postingId,
+    keepPreviousData: true,
     onError: (err: any) => {
       console.log(err);
     },
