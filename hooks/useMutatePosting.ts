@@ -23,12 +23,14 @@ export const useMutatePosting: any = (
       onSuccess: (res) => {
         const previousData = queryClient.getQueryData<posting[]>([POSTING]);
         if (previousData) {
-          queryClient.setQueriesData([POSTING], [res, ...previousData]);
+          queryClient.setQueryData([POSTING], [res, ...previousData]);
         }
       },
       onError: (err: any) => {
-        if (err.response.status === 401 || err.response.status === 403)
+        if (err.response.status === 401 || err.response.status === 403) {
+          console.log(err);
           router.push('/board');
+        }
       },
     }
   );
@@ -45,12 +47,14 @@ export const useMutatePosting: any = (
       onSuccess: (res) => {
         const previousData = queryClient.getQueryData<Comment[]>([COMMENT]);
         if (previousData) {
-          queryClient.setQueriesData([COMMENT], [res, ...previousData]);
+          queryClient.setQueryData([COMMENT], [res, ...previousData]);
         }
       },
       onError: (err: any) => {
-        if (err.response.status === 401 || err.response.status === 403)
+        if (err.response.status === 401 || err.response.status === 403) {
+          console.log(err);
           router.push('/board');
+        }
       },
     }
   );
@@ -73,7 +77,8 @@ export const useMutatePosting: any = (
       },
       onError: (err: any) => {
         console.log(err);
-        if (err.respopnse.status === 401 || err.response.status === 403) {
+        if (err.response.status === 401 || err.response.status === 403) {
+          console.log(err);
           router.push('/board');
         }
       },
