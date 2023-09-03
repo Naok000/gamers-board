@@ -35,9 +35,11 @@ const DetailPostingPage = () => {
   const [comment, setComment] = useState('');
   const { commentPostingMutation, deletePostingMutation } =
     useMutatePosting(postingId);
+
   const { data: posting } = useQueryPostingId(postingId);
-  const { data: comments, isSuccess } = useQueryComment(postingId);
   const { data: user, status } = useQueryUser();
+  const { data: comments, isSuccess } = useQueryComment(postingId);
+
   if (status === 'error') {
     router.push('/auth/login');
   } else if (status === 'loading') {
@@ -45,9 +47,13 @@ const DetailPostingPage = () => {
   }
 
   const newComment = async () => {
-    await commentPostingMutation.mutate({ comment });
-    setComment('');
-    router.reload();
+    try {
+      await commentPostingMutation.mutate({ comment });
+      setComment('');
+      router.reload();
+    } catch (err) {
+      console.error('Faild to post a comment', err);
+    }
   };
 
   const deletePosting = async (id: string) => {
