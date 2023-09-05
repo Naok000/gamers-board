@@ -6,7 +6,7 @@ import { COMMENT, POSTING } from './queryKey';
 import { posting, comment } from './types/queryType';
 
 export const useMutatePosting: any = (
-  postingId?: string | string[] | undefined
+  postingId: string | string[] | undefined
 ) => {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -44,17 +44,26 @@ export const useMutatePosting: any = (
       return res.data;
     },
     {
-      onSuccess: (res) => {
+      onMutate: async (res) => {
+        await queryClient.cancelQueries([COMMENT]);
         const previousData = queryClient.getQueryData<Comment[]>([COMMENT]);
         if (previousData) {
+          // update to the new value
           queryClient.setQueryData([COMMENT], [res, ...previousData]);
+
+          // return snapshotted value
+          return { previousData };
         }
       },
-      onError: (err: any) => {
+      onError: (err: any, context) => {
         if (err.response.status === 401 || err.response.status === 403) {
           console.log(err);
           router.push('/board');
         }
+        queryClient.setQueryData([COMMENT], context.comment);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries([COMMENT]);
       },
     }
   );
@@ -76,7 +85,6 @@ export const useMutatePosting: any = (
         }
       },
       onError: (err: any) => {
-        console.log(err);
         if (err.response.status === 401 || err.response.status === 403) {
           console.log(err);
           router.push('/board');

@@ -47,10 +47,13 @@ const DetailPostingPage = () => {
   }
 
   const newComment = async () => {
+    if (comment?.trim() === '') {
+      return;
+    }
     try {
-      await commentPostingMutation.mutate({ comment });
+      commentPostingMutation.mutate({ comment });
       setComment('');
-      router.reload();
+      setOpenComments(false);
     } catch (err) {
       console.error('Faild to post a comment', err);
     }
