@@ -20,13 +20,14 @@ import {
   useQueryComment,
   useQueryPostingId,
 } from '../../hooks/useQueryPosting';
-import { ArrowBackIcon, ChatIcon, DeleteIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, ChatIcon } from '@chakra-ui/icons';
 import { useMutatePosting } from '../../hooks/useMutatePosting';
 import { useQueryUser } from '../../hooks/useQueryUser';
 import { Layout } from '../../components/Layout';
 import { MdClose, MdOutlinePostAdd } from 'react-icons/md';
 import { deleteObject, ref } from 'firebase/storage';
 import { storage, storageImageFileRef } from '../../lib/firebase';
+import AlertDeleteDialog from '../../components/AlertDeleteDialog';
 
 const DetailPostingPage = () => {
   const router = useRouter();
@@ -36,14 +37,14 @@ const DetailPostingPage = () => {
   const { commentPostingMutation, deletePostingMutation } =
     useMutatePosting(postingId);
 
-  const { data: posting } = useQueryPostingId(postingId);
   const { data: user, status } = useQueryUser();
+  const { data: posting } = useQueryPostingId(postingId);
   const { data: comments, isSuccess } = useQueryComment(postingId);
 
   if (status === 'error') {
     router.push('/auth/login');
   } else if (status === 'loading') {
-    return <Spinner />;
+    return <Spinner size={'xl'} />;
   }
 
   const newComment = async () => {
@@ -59,8 +60,8 @@ const DetailPostingPage = () => {
     }
   };
 
-  const deletePosting = async (id: string) => {
-    await deletePostingMutation.mutate(id);
+  const deletePosting = async (id: string | string[] | undefined) => {
+    deletePostingMutation.mutate(id);
     if (
       !ref(
         storage,
@@ -157,16 +158,10 @@ const DetailPostingPage = () => {
                     </Flex>
                     <Flex>
                       {posting.userId === user?.id ? (
-                        <Button
-                          leftIcon={<DeleteIcon />}
-                          onClick={() => deletePosting(posting.id)}
-                          mx={1}
-                          size='sm'
-                          colorScheme='red'
-                          variant='solid'
-                        >
-                          Delete
-                        </Button>
+                        <AlertDeleteDialog
+                          id={postingId}
+                          action={() => deletePosting(postingId)}
+                        />
                       ) : (
                         <></>
                       )}

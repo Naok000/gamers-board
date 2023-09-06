@@ -1,13 +1,38 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  useMutation,
+  UseMutationResult,
+  useQueryClient,
+} from '@tanstack/react-query';
 import axios from 'axios';
 import { Posting } from '@prisma/client';
 import { useRouter } from 'next/router';
 import { COMMENT, POSTING } from './queryKey';
 import { posting, comment } from './types/queryType';
 
-export const useMutatePosting: any = (
-  postingId: string | string[] | undefined
-) => {
+export const useMutatePosting = (
+  postingId?: string | string[] | undefined
+): {
+  createPostingMutation: UseMutationResult<
+    any,
+    any,
+    Omit<posting, 'id'>,
+    unknown
+  >;
+  commentPostingMutation: UseMutationResult<
+    any,
+    any,
+    Omit<comment, 'id'>,
+    {
+      previousData: Comment[];
+    }
+  >;
+  deletePostingMutation: UseMutationResult<
+    void,
+    any,
+    string | string[] | undefined,
+    unknown
+  >;
+} => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -69,7 +94,7 @@ export const useMutatePosting: any = (
   );
 
   const deletePostingMutation = useMutation(
-    async (postingId: string) => {
+    async (postingId: string | string[] | undefined) => {
       await axios.delete(
         `${process.env.NEXT_PUBLIC_API_URL}/board/${postingId}`
       );
