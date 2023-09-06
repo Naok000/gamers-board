@@ -13,7 +13,6 @@ import {
   IconButton,
   Avatar,
   AvatarBadge,
-  useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -22,12 +21,13 @@ import { ChangeEvent, useRef, useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { getUserSession } from '../../hooks/useQueryUser';
 import { storage } from '../../lib/firebase';
-import { generateFileName } from '../../lib/generateFileName';
+import { generateFileName } from '../../utils/generateFileName';
 import { currentUserId } from '../../recoil/boardState';
+import { toastSummary } from '../../utils/toastSummary';
 
 const signup = () => {
   const router = useRouter();
-  const toast = useToast();
+  const { successCreateAcountToast } = toastSummary();
   const setUserId = useSetRecoilState(currentUserId);
   const [previewImg, setPreviewImg] = useState<string>('');
   const [avatarImg, setAvatarImg] = useState<File | null>(null);
@@ -88,13 +88,7 @@ const signup = () => {
       });
       const user = await getUserSession();
       setUserId(user);
-      toast({
-        title: 'Account created.',
-        description: "We've created your account for you.",
-        status: 'success',
-        duration: 9000,
-        isClosable: true,
-      });
+      successCreateAcountToast();
       URL.revokeObjectURL(previewImg);
       setPreviewImg('');
       await router.push('/board');

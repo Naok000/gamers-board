@@ -9,7 +9,6 @@ import {
   Stack,
   useColorModeValue,
   Link,
-  useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -17,38 +16,17 @@ import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { getUserSession } from '../../hooks/useQueryUser';
 import { currentUserId } from '../../recoil/boardState';
+import { toastSummary } from '../../utils/toastSummary';
 
 const Login = () => {
   const router = useRouter();
+  const { errorLoginToast, loginToast } = toastSummary();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const setUserId = useSetRecoilState(currentUserId);
-  const toast = useToast();
 
   const testUserEmail: string = 'testUser@test.com';
   const testUserPassword: string = 'uidjopDHJilkjfskkkd84352';
-
-  const loginToast = () => {
-    return toast({
-      title: 'Successful login',
-      description: 'Welcome to Gamers Board',
-      position: 'top',
-      status: 'success',
-      duration: 7000,
-      isClosable: true,
-    });
-  };
-
-  const errorLoginToast = () => {
-    return toast({
-      title: 'Login failed',
-      description: 'Password or Email is incorrect.',
-      position: 'top',
-      status: 'error',
-      duration: 9000,
-      isClosable: true,
-    });
-  };
 
   const testSignIn = async () => {
     try {
