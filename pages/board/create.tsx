@@ -12,8 +12,8 @@ import {
   Box,
   IconButton,
   HStack,
-  Text,
   FormHelperText,
+  Img,
 } from '@chakra-ui/react';
 import { useMutatePosting } from '../../hooks/useMutatePosting';
 import { ChangeEvent, useRef, useState } from 'react';
@@ -25,6 +25,7 @@ import { generateFileName } from '../../lib/generateFileName';
 import { MdAddPhotoAlternate } from 'react-icons/md';
 
 const CreatePosting = () => {
+  const router = useRouter();
   const { createPostingMutation } = useMutatePosting();
   const [newPosting, setPosting] = useState({
     title: '',
@@ -33,7 +34,7 @@ const CreatePosting = () => {
     imageURL: '',
   });
   const [postingThumbnail, setPostingThumbnail] = useState<File | null>(null);
-  const router = useRouter();
+  const [previewThumbnail, setPreviewThumbnail] = useState<string>('');
 
   const inputRef = useRef<HTMLInputElement>(null);
   const onButtonClick = () => {
@@ -43,6 +44,7 @@ const CreatePosting = () => {
   const onChangeImageHandler = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files![0]) {
       setPostingThumbnail(e.target.files![0]);
+      setPreviewThumbnail(URL.createObjectURL(e.target.files![0]));
       e.target.value = '';
     }
   };
@@ -64,7 +66,7 @@ const CreatePosting = () => {
         },
         async () => {
           await getDownloadURL(storageRef).then(async (url) => {
-            await createPostingMutation.mutate({
+            createPostingMutation.mutate({
               ...newPosting,
               imageURL: url,
               thumbnailFileName: fileName,
@@ -76,7 +78,7 @@ const CreatePosting = () => {
       await getDownloadURL(
         ref(storage, `default_images/${newPosting.gameTitle}.jpg`)
       ).then(async (url) => {
-        await createPostingMutation.mutate({
+        createPostingMutation.mutate({
           ...newPosting,
           imageURL: url,
           thumbnailFileName: `${newPosting.gameTitle}`,
@@ -90,6 +92,8 @@ const CreatePosting = () => {
       gameTitle: 'any title',
       imageURL: '',
     });
+    URL.revokeObjectURL(previewThumbnail);
+    setPreviewThumbnail('');
     setPostingThumbnail(null);
     router.push(`/board`);
   };
@@ -130,7 +134,19 @@ const CreatePosting = () => {
                     icon={<MdAddPhotoAlternate />}
                     onClick={onButtonClick}
                   />
-                  <Text>{postingThumbnail?.name.toString()}</Text>
+                  {previewThumbnail ? (
+                    <Box h='160px'>
+                      <Img
+                        alt='thumbnail'
+                        src={previewThumbnail}
+                        h='full'
+                        w='full'
+                        objectFit='cover'
+                      />
+                    </Box>
+                  ) : (
+                    <></>
+                  )}
                 </HStack>
                 <FormHelperText>
                   If no image file is selected, the prepared thumbnail will be
