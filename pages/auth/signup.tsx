@@ -26,6 +26,11 @@ import { generateFileName } from '../../lib/generateFileName';
 import { currentUserId } from '../../recoil/boardState';
 
 const signup = () => {
+  const router = useRouter();
+  const toast = useToast();
+  const setUserId = useSetRecoilState(currentUserId);
+  const [previewImg, setPreviewImg] = useState<string>('');
+  const [avatarImg, setAvatarImg] = useState<File | null>(null);
   const [signUpUser, setSignUpUser] = useState({
     userName: '',
     email: '',
@@ -33,11 +38,6 @@ const signup = () => {
     url: '',
     fileName: '',
   });
-
-  const [avatarImg, setAvatarImg] = useState<File | null>(null);
-  const setUserId = useSetRecoilState(currentUserId);
-  const router = useRouter();
-  const toast = useToast();
 
   const inputRef = useRef<HTMLInputElement>(null);
   const onButtonClick = () => {
@@ -47,6 +47,7 @@ const signup = () => {
   const onChangeImageHandler = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files![0]) {
       setAvatarImg(e.target.files![0]);
+      setPreviewImg(URL.createObjectURL(e.target.files![0]));
       e.target.value = '';
     }
   };
@@ -94,6 +95,8 @@ const signup = () => {
         duration: 9000,
         isClosable: true,
       });
+      URL.revokeObjectURL(previewImg);
+      setPreviewImg('');
       await router.push('/board');
     } catch (err) {
       console.log(err);
@@ -133,7 +136,7 @@ const signup = () => {
                   aria-label='avatar'
                   icon={
                     avatarImg ? (
-                      <Avatar bg='teal.500'>
+                      <Avatar bg='teal.500' src={previewImg}>
                         <AvatarBadge boxSize='1.25rem' bg='blue.500' />
                       </Avatar>
                     ) : (
