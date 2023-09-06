@@ -33,6 +33,7 @@ import {
   MdAppRegistration,
   MdAdminPanelSettings,
 } from 'react-icons/md';
+import { COMMENT, OWN_POSTING, POSTING, USER } from '../hooks/queryKey';
 
 interface NavItem {
   label: string;
@@ -63,10 +64,12 @@ export default function WithSubnavigation() {
   const setUser = useSetRecoilState(currentUserId);
 
   const handleLogout = async () => {
-    queryClient.removeQueries(['postings']);
-    // キャッシュに格納されているユーザー情報をログアウト時に消去する
-    queryClient.removeQueries(['user']);
-    destroyCookie(null, 'user', '/');
+    // キャッシュに格納されている情報をログアウト時に消去する
+    queryClient.removeQueries([POSTING]);
+    queryClient.removeQueries([COMMENT]);
+    queryClient.removeQueries([USER]);
+    queryClient.removeQueries([OWN_POSTING]);
+    destroyCookie(null, USER, '/');
     setUser(undefined);
     await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`);
     await router.push('/board');
