@@ -9,6 +9,7 @@ import {
   Stack,
   useColorModeValue,
   Link,
+  useToast,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -22,9 +23,32 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const setUserId = useSetRecoilState(currentUserId);
+  const toast = useToast();
 
   const testUserEmail: string = 'testUser@test.com';
   const testUserPassword: string = 'uidjopDHJilkjfskkkd84352';
+
+  const loginToast = () => {
+    return toast({
+      title: 'Successful login',
+      description: 'Welcome to Gamers Board',
+      position: 'top',
+      status: 'success',
+      duration: 7000,
+      isClosable: true,
+    });
+  };
+
+  const errorLoginToast = () => {
+    return toast({
+      title: 'Login failed',
+      description: 'Password or Email is incorrect.',
+      position: 'top',
+      status: 'error',
+      duration: 9000,
+      isClosable: true,
+    });
+  };
 
   const testSignIn = async () => {
     try {
@@ -34,8 +58,10 @@ const Login = () => {
       });
       const user = await getUserSession();
       setUserId(user);
+      loginToast();
       await router.push('/board');
     } catch (err) {
+      errorLoginToast();
       console.log(err);
     }
   };
@@ -50,8 +76,10 @@ const Login = () => {
       setPassword('');
       const user = await getUserSession();
       setUserId(user);
+      loginToast();
       await router.push('/board');
     } catch (err) {
+      errorLoginToast();
       console.log(err);
     }
   };
