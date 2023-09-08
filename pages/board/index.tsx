@@ -59,6 +59,7 @@ const BoardPage = () => {
                 >
                   <Box h='160px' borderBottom={'1px'} borderColor='black'>
                     <Img
+                      alt='thumbnail'
                       src={posting.thumbnail.imageURL}
                       h='full'
                       w='full'
