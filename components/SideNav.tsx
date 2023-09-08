@@ -34,7 +34,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Posting List', href: '/admin/posting-list', icon: FiCompass },
 ];
 
-export default function SimpleSidebar({ children }: { children: ReactNode }) {
+const SimpleSidebar = ({ children }: { children: ReactNode }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -63,7 +63,7 @@ export default function SimpleSidebar({ children }: { children: ReactNode }) {
       </Box>
     </Box>
   );
-}
+};
 
 interface SidebarProps extends BoxProps {
   onClose: () => void;
@@ -187,3 +187,5 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     </Flex>
   );
 };
+
+export default SimpleSidebar;

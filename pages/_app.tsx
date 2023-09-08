@@ -36,7 +36,7 @@ const UserObserver = () => {
   return null;
 };
 
-function WatchUser() {
+const WatchUser = () => {
   const user = useRecoilValue(currentUserId);
 
   useEffect(() => {
@@ -44,9 +44,9 @@ function WatchUser() {
       setCookie(null, 'user', JSON.stringify(user), options);
   }, [user]);
   return null;
-}
+};
 
-function MyApp({ Component, pageProps }: AppProps) {
+const MyApp = ({ Component, pageProps }: AppProps) => {
   axios.defaults.withCredentials = true;
   useEffect(() => {
     const getCsrfToken = async () => {
@@ -69,6 +69,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       </RecoilRoot>
     </ChakraProvider>
   );
-}
+};
 
 export default MyApp;

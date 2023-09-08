@@ -33,7 +33,7 @@ import {
   MdAppRegistration,
   MdAdminPanelSettings,
 } from 'react-icons/md';
-import { COMMENT, OWN_POSTING, POSTING, USER } from '../hooks/queryKey';
+import { COMMENT, OWN_POSTING, POSTING, USER } from '../consts/queryKey';
 
 interface NavItem {
   label: string;
@@ -56,7 +56,7 @@ const NAV_ITEMS: Array<NavItem> = [
   },
 ];
 
-export default function WithSubnavigation() {
+const WithSubnavigation = () => {
   const { isOpen, onToggle } = useDisclosure();
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -187,7 +187,7 @@ export default function WithSubnavigation() {
       </Collapse>
     </Box>
   );
-}
+};
 
 const DesktopNav = () => {
   const linkColor = useColorModeValue('gray.600', 'gray.200');
@@ -341,3 +341,5 @@ const MobileNavItem = ({ label, children, href }: NavItem) => {
     </Stack>
   );
 };
+
+export default WithSubnavigation;

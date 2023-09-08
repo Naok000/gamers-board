@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { Posting } from '@prisma/client';
-import { COMMENT, OWN_POSTING, POSTING } from './queryKey';
+import { COMMENT, OWN_POSTING, POSTING } from '../consts/queryKey';
 import { postingById, postingWithImage, userComment } from './types/queryType';
+
+const errorLog = (err: any) => {
+  console.log(err);
+};
 
 export const useQueryPosting = () => {
   const getPosting = async () => {
@@ -15,9 +19,7 @@ export const useQueryPosting = () => {
     queryKey: [POSTING],
     queryFn: getPosting,
     keepPreviousData: true,
-    onError: (err: any) => {
-      console.log(err);
-    },
+    onError: errorLog,
   });
 };
 
@@ -32,9 +34,7 @@ export const useQueryPostingId = (postingId: string | string[] | undefined) => {
     queryKey: [POSTING, postingId],
     queryFn: getPostingId,
     enabled: !!postingId,
-    onError: (err: any) => {
-      console.log(err);
-    },
+    onError: errorLog,
   });
 };
 
@@ -50,9 +50,7 @@ export const useQueryComment = (postingId: string | string[] | undefined) => {
     queryFn: getComment,
     enabled: !!postingId,
     keepPreviousData: true,
-    onError: (err: any) => {
-      console.log(err);
-    },
+    onError: errorLog,
   });
 };
 
@@ -66,8 +64,6 @@ export const useQueryOwnPosting = () => {
   return useQuery<Posting[], Error>({
     queryKey: [OWN_POSTING],
     queryFn: getOwnPosting,
-    onError: (err: any) => {
-      console.log(err);
-    },
+    onError: errorLog,
   });
 };
