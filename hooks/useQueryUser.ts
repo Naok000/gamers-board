@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { User } from '@prisma/client';
 import { userProfile } from './types/queryType';
-import { USER } from './queryKey';
+import { USER } from '../consts/queryKey';
 
 export const getUserSession = async () => {
   const { data } = await axios.get<Omit<User, 'password'>>(

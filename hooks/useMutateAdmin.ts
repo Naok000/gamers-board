@@ -2,7 +2,7 @@ import { Posting, User } from '@prisma/client';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { POSTING_LIST, USER_LIST } from './queryKey';
+import { POSTING_LIST, USER_LIST } from '../consts/queryKey';
 
 export const useMutateAdmin = () => {
   const queryClient = useQueryClient();

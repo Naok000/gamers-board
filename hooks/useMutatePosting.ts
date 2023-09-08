@@ -6,7 +6,7 @@ import {
 import axios from 'axios';
 import { Posting } from '@prisma/client';
 import { useRouter } from 'next/router';
-import { COMMENT, POSTING } from './queryKey';
+import { COMMENT, POSTING } from '../consts/queryKey';
 import { posting, comment } from './types/queryType';
 
 export const useMutatePosting = (

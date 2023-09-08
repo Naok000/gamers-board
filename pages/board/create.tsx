@@ -18,10 +18,10 @@ import {
 import { useMutatePosting } from '../../hooks/useMutatePosting';
 import { ChangeEvent, useRef, useState } from 'react';
 import { Layout } from '../../components/Layout';
-import { gameTitleLabel } from '../../lib/game_title/gameTitle';
+import { gameTitleLabel } from '../../consts/game_title/gameTitle';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from '../../lib/firebase';
-import { generateFileName } from '../../lib/generateFileName';
+import { generateFileName } from '../../utils/generateFileName';
 import { MdAddPhotoAlternate } from 'react-icons/md';
 
 const CreatePosting = () => {
