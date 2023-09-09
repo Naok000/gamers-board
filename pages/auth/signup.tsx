@@ -26,6 +26,8 @@ import { currentUserId } from '../../recoil/boardState';
 import { toastSummary } from '../../utils/toastSummary';
 import { Layout } from '../../components/Layout';
 import { hiddenInputFeature } from '../../utils/hiddenInputFeature';
+import { INIT_SIGNUP_DATA } from '../../consts/auth/stateInit';
+import FormItem from '../../components/auth/AuthFormItem';
 
 const signup = () => {
   const router = useRouter();
@@ -33,14 +35,8 @@ const signup = () => {
   const setUserId = useSetRecoilState(currentUserId);
   const [avatarImg, setAvatarImg] = useState<File | null>(null);
   const [previewImg, setPreviewImg] = useState<string>('');
-  const initSignUpData = {
-    userName: '',
-    email: '',
-    password: '',
-    url: '',
-    fileName: '',
-  };
-  const [signUpUser, setSignUpUser] = useState(initSignUpData);
+
+  const [signUpUser, setSignUpUser] = useState(INIT_SIGNUP_DATA);
 
   const { inputRef, onButtonClick, onChangeImageHandler } = hiddenInputFeature(
     setAvatarImg,
@@ -74,7 +70,7 @@ const signup = () => {
         );
         await postSignUp();
       }
-      setSignUpUser(initSignUpData);
+      setSignUpUser(INIT_SIGNUP_DATA);
       const user = await getUserSession();
       setUserId(user);
       successCreateAcountToast();
@@ -133,40 +129,33 @@ const signup = () => {
                   />
                 </FormControl>
               </Box>
-              <FormControl id='userName' isRequired>
-                <FormLabel>User Name</FormLabel>
-                <Input
-                  type='userName'
-                  value={signUpUser.userName}
-                  onChange={(e) =>
-                    setSignUpUser({ ...signUpUser, userName: e.target.value })
-                  }
-                  required
-                />
-              </FormControl>
-
-              <FormControl id='email' isRequired>
-                <FormLabel>Email address</FormLabel>
-                <Input
-                  type='email'
-                  value={signUpUser.email}
-                  onChange={(e) =>
-                    setSignUpUser({ ...signUpUser, email: e.target.value })
-                  }
-                  required
-                />
-              </FormControl>
-              <FormControl id='password' isRequired>
-                <FormLabel>Password</FormLabel>
-                <Input
-                  type='password'
-                  value={signUpUser.password}
-                  onChange={(e) =>
-                    setSignUpUser({ ...signUpUser, password: e.target.value })
-                  }
-                  required
-                />
-              </FormControl>
+              <FormItem
+                id='userName'
+                label='User Name'
+                type='userName'
+                value={signUpUser.userName}
+                changeAct={(e) =>
+                  setSignUpUser({ ...signUpUser, userName: e.target.value })
+                }
+              />
+              <FormItem
+                id='email'
+                label='Email Address'
+                type='email'
+                value={signUpUser.email}
+                changeAct={(e) =>
+                  setSignUpUser({ ...signUpUser, email: e.target.value })
+                }
+              />
+              <FormItem
+                id='password'
+                label='Password'
+                type='password'
+                value={signUpUser.password}
+                changeAct={(e) =>
+                  setSignUpUser({ ...signUpUser, password: e.target.value })
+                }
+              />
               <Stack spacing={4}>
                 <Button
                   bg={'blue.400'}
