@@ -147,7 +147,7 @@ const signup = () => {
                   setSignUpUser({ ...signUpUser, email: e.target.value })
                 }
               />
-              <FormItem
+              <AuthFormItem
                 id='password'
                 label='Password'
                 type='password'
