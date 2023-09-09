@@ -16,38 +16,31 @@ import {
   Img,
 } from '@chakra-ui/react';
 import { useMutatePosting } from '../../hooks/useMutatePosting';
-import { ChangeEvent, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Layout } from '../../components/Layout';
 import { gameTitleLabel } from '../../consts/game_title/gameTitle';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from '../../lib/firebase';
 import { generateFileName } from '../../utils/generateFileName';
 import { MdAddPhotoAlternate } from 'react-icons/md';
+import { hiddenInputFeature } from '../../utils/hiddenInputFeature';
 
 const CreatePosting = () => {
   const router = useRouter();
-  const { createPostingMutation } = useMutatePosting();
-  const [newPosting, setPosting] = useState({
+  const initPosting = {
     title: '',
     content: '',
     gameTitle: 'any title',
     imageURL: '',
-  });
+  };
+  const { createPostingMutation } = useMutatePosting();
+  const [newPosting, setPosting] = useState(initPosting);
   const [postingThumbnail, setPostingThumbnail] = useState<File | null>(null);
   const [previewThumbnail, setPreviewThumbnail] = useState<string>('');
-
-  const inputRef = useRef<HTMLInputElement>(null);
-  const onButtonClick = () => {
-    inputRef.current?.click();
-  };
-
-  const onChangeImageHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files![0]) {
-      setPostingThumbnail(e.target.files![0]);
-      setPreviewThumbnail(URL.createObjectURL(e.target.files![0]));
-      e.target.value = '';
-    }
-  };
+  const { inputRef, onButtonClick, onChangeImageHandler } = hiddenInputFeature(
+    setPostingThumbnail,
+    setPreviewThumbnail
+  );
 
   const addPosting = async () => {
     if (postingThumbnail) {
@@ -86,12 +79,7 @@ const CreatePosting = () => {
       });
     }
 
-    setPosting({
-      title: '',
-      content: '',
-      gameTitle: 'any title',
-      imageURL: '',
-    });
+    setPosting(initPosting);
     URL.revokeObjectURL(previewThumbnail);
     setPreviewThumbnail('');
     setPostingThumbnail(null);
@@ -196,7 +184,11 @@ const CreatePosting = () => {
               </FormControl>
 
               <Button
-                isDisabled={!newPosting.gameTitle || !newPosting.title}
+                isDisabled={
+                  !newPosting.gameTitle ||
+                  newPosting.gameTitle === 'any title' ||
+                  !newPosting.title
+                }
                 colorScheme='teal'
                 onClick={() => addPosting()}
               >

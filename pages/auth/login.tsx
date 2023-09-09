@@ -14,6 +14,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
+import { Layout } from '../../components/Layout';
 import { getUserSession } from '../../hooks/useQueryUser';
 import { currentUserId } from '../../recoil/boardState';
 import { toastSummary } from '../../utils/toastSummary';
@@ -62,80 +63,82 @@ const Login = () => {
     }
   };
   return (
-    <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      bgGradient='linear(to-l,rgba(7,27,82,1) 0%, rgba(0,128,128,1) 100%)'
-    >
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-        <Stack align={'center'}>
-          <Heading color={'black'} fontSize={'4xl'}>
-            Sign in to your account
-          </Heading>
-        </Stack>
-        <Box
-          rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
-          p={8}
-        >
-          <Stack spacing={4}>
-            <FormControl id='email' isRequired>
-              <FormLabel>Email address</FormLabel>
-              <Input
-                type='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </FormControl>
-            <FormControl id='password' isRequired>
-              <FormLabel>Password</FormLabel>
-              <Input
-                type='password'
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </FormControl>
-            <Stack spacing={4}>
-              <Stack
-                direction={{ base: 'column', sm: 'row' }}
-                align={'start'}
-                justify={'space-between'}
-              >
-                <Link href='#'>Forgot password?</Link>
-                <Link href='/auth/signup' color={'blue.400'}>
-                  Create a new Account
-                </Link>
-              </Stack>
-              <Button
-                bg={'blue.400'}
-                color={'white'}
-                _hover={{
-                  bg: 'blue.500',
-                }}
-                onClick={signInEmail}
-                isDisabled={!email || !password}
-              >
-                Sign in
-              </Button>
-              <Button
-                bg={'orange.400'}
-                color={'white'}
-                _hover={{
-                  bg: 'orange.500',
-                }}
-                onClick={testSignIn}
-              >
-                Guest Login
-              </Button>
-            </Stack>
+    <Layout title='Sign In'>
+      <Flex
+        minH={'100vh'}
+        align={'center'}
+        justify={'center'}
+        bgGradient='linear(to-l,rgba(7,27,82,1) 0%, rgba(0,128,128,1) 100%)'
+      >
+        <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+          <Stack align={'center'}>
+            <Heading color={'black'} fontSize={'4xl'}>
+              Sign in to your account
+            </Heading>
           </Stack>
-        </Box>
-      </Stack>
-    </Flex>
+          <Box
+            rounded={'lg'}
+            bg={useColorModeValue('white', 'gray.700')}
+            boxShadow={'lg'}
+            p={8}
+          >
+            <Stack spacing={4}>
+              <FormControl id='email' isRequired>
+                <FormLabel>Email address</FormLabel>
+                <Input
+                  type='email'
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </FormControl>
+              <FormControl id='password' isRequired>
+                <FormLabel>Password</FormLabel>
+                <Input
+                  type='password'
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </FormControl>
+              <Stack spacing={4}>
+                <Stack
+                  direction={{ base: 'column', sm: 'row' }}
+                  align={'start'}
+                  justify={'space-between'}
+                >
+                  <Link href='#'>Forgot password?</Link>
+                  <Link href='/auth/signup' color={'blue.400'}>
+                    Create a new Account
+                  </Link>
+                </Stack>
+                <Button
+                  bg={'blue.400'}
+                  color={'white'}
+                  _hover={{
+                    bg: 'blue.500',
+                  }}
+                  onClick={signInEmail}
+                  isDisabled={!email || !password}
+                >
+                  Sign in
+                </Button>
+                <Button
+                  bg={'orange.400'}
+                  color={'white'}
+                  _hover={{
+                    bg: 'orange.500',
+                  }}
+                  onClick={testSignIn}
+                >
+                  Guest Login
+                </Button>
+              </Stack>
+            </Stack>
+          </Box>
+        </Stack>
+      </Flex>
+    </Layout>
   );
 };
 
