@@ -81,14 +81,14 @@ const Login = () => {
             p={8}
           >
             <Stack spacing={4}>
-              <FormItem
+              <AuthFormItem
                 id='email'
                 label='Email address'
                 type='email'
                 value={email}
                 changeAct={(e) => setEmail(e.target.value)}
               />
-              <FormItem
+              <AuthFormItem
                 id='password'
                 label='Password'
                 type='password'
