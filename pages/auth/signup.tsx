@@ -27,7 +27,7 @@ import { toastSummary } from '../../utils/toastSummary';
 import { Layout } from '../../components/Layout';
 import { hiddenInputFeature } from '../../utils/hiddenInputFeature';
 import { INIT_SIGNUP_DATA } from '../../consts/auth/stateInit';
-import FormItem from '../../components/auth/AuthFormItem';
+import AuthFormItem from '../../components/auth/AuthFormItem';
 
 const signup = () => {
   const router = useRouter();
@@ -129,7 +129,7 @@ const signup = () => {
                   />
                 </FormControl>
               </Box>
-              <FormItem
+              <AuthFormItem
                 id='userName'
                 label='User Name'
                 type='userName'
@@ -138,7 +138,7 @@ const signup = () => {
                   setSignUpUser({ ...signUpUser, userName: e.target.value })
                 }
               />
-              <FormItem
+              <AuthFormItem
                 id='email'
                 label='Email Address'
                 type='email'

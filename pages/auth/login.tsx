@@ -11,7 +11,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
-import FormItem from '../../components/auth/AuthFormItem';
+import AuthFormItem from '../../components/auth/AuthFormItem';
 import { Layout } from '../../components/Layout';
 import { getUserSession } from '../../hooks/useQueryUser';
 import { currentUserId } from '../../recoil/boardState';

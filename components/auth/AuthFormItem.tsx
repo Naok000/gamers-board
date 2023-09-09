@@ -9,7 +9,7 @@ type Props = {
   changeAct: React.ChangeEventHandler<HTMLInputElement> | undefined;
 };
 
-const FormItem = ({ id, type, label, value, changeAct }: Props) => {
+const AuthFormItem = ({ id, type, label, value, changeAct }: Props) => {
   return (
     <FormControl id={id} isRequired>
       <FormLabel>{label}</FormLabel>
@@ -18,4 +18,4 @@ const FormItem = ({ id, type, label, value, changeAct }: Props) => {
   );
 };
 
-export default FormItem;
+export default AuthFormItem;
