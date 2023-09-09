@@ -1,4 +1,12 @@
-import { Button, Container, Heading, Stack, Text } from '@chakra-ui/react';
+import {
+  Button,
+  Container,
+  Heading,
+  HStack,
+  Link,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { Layout } from '../components/Layout';
 
@@ -27,7 +35,7 @@ const BoardTopPage = () => {
             Discuss and share your knowledge of games and improve your
             techniques through friendly competition.
           </Text>
-          <Stack spacing={6}>
+          <HStack spacing={6}>
             <Button
               rounded={'full'}
               px={6}
@@ -38,7 +46,20 @@ const BoardTopPage = () => {
             >
               Go Board & Posting
             </Button>
-          </Stack>
+            <Link
+              href='https://www.loom.com/share/99cbce3d01474d06b2166cef9d7083a7?sid=297dd0cd-f979-46c2-ac4a-fd8567b630f4'
+              isExternal
+            >
+              <Button
+                rounded={'full'}
+                px={6}
+                bg={'gray.300'}
+                _hover={{ bg: 'gray.500' }}
+              >
+                How to Use
+              </Button>
+            </Link>
+          </HStack>
         </Stack>
       </Container>
     </Layout>
