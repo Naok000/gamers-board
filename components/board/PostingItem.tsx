@@ -9,7 +9,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { BsArrowUpRight } from 'react-icons/bs';
-import { postingWithImage } from '../hooks/types/queryType';
+import { postingWithImage } from '../../hooks/types/queryType';
 
 type Props = {
   posting: postingWithImage;

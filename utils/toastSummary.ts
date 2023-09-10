@@ -29,6 +29,7 @@ export const toastSummary = () => {
     return toast({
       title: 'Account created.',
       description: "We've created your account for you.",
+      position: 'top',
       status: 'success',
       duration: 9000,
       isClosable: true,

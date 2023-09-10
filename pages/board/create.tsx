@@ -107,16 +107,15 @@ const CreatePosting = () => {
               <FormControl id='thumbnail'>
                 <FormLabel>Select Thumbnail</FormLabel>
 
-                <Input
-                  type='file'
-                  name='file'
-                  ref={inputRef}
-                  accept='image/*'
-                  hidden
-                  onChange={onChangeImageHandler}
-                />
-
                 <HStack>
+                  <Input
+                    type='file'
+                    name='file'
+                    ref={inputRef}
+                    accept='image/*'
+                    hidden
+                    onChange={onChangeImageHandler}
+                  />
                   <IconButton
                     aria-label='thumbnail'
                     icon={<MdAddPhotoAlternate />}
@@ -170,8 +169,8 @@ const CreatePosting = () => {
                   }
                 />
               </FormControl>
-              <FormControl>
-                <FormLabel id='content'>Posting Details</FormLabel>
+              <FormControl id='content'>
+                <FormLabel>Posting Details</FormLabel>
                 <Textarea
                   mr={4}
                   p={4}

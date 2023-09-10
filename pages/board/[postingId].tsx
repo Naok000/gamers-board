@@ -27,7 +27,8 @@ import { Layout } from '../../components/Layout';
 import { MdClose, MdOutlinePostAdd } from 'react-icons/md';
 import { deleteObject, ref } from 'firebase/storage';
 import { storage, storageImageFileRef } from '../../lib/firebase';
-import AlertDeleteDialog from '../../components/AlertDeleteDialog';
+import AlertDeleteDialog from '../../components/board/AlertDeleteDialog';
+import CommentItem from '../../components/board/CommentItem';
 
 const DetailPostingPage = () => {
   const router = useRouter();
@@ -174,27 +175,7 @@ const DetailPostingPage = () => {
             <Stack overflowY={'auto'}>
               {isSuccess === true &&
                 comments.map((com) => (
-                  <Box
-                    key={com.id}
-                    maxW={'5xl'}
-                    bg='white'
-                    p={2}
-                    borderRadius='lg'
-                  >
-                    <HStack>
-                      <Avatar src={com.user.avatar.avatarImgURL} />
-                      <Stack>
-                        <Heading size='sm' fontWeight={'medium'}>
-                          @{com.user.userName}
-                        </Heading>
-                        <Box>{com.comment}</Box>
-                      </Stack>
-                      <Spacer />
-                      <Box color='gray.500'>
-                        {new Date(com.timestamp).toLocaleString()}
-                      </Box>
-                    </HStack>
-                  </Box>
+                  <CommentItem key={com.id} comment={com} />
                 ))}
             </Stack>
             {openComments && (

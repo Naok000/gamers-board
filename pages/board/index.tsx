@@ -1,8 +1,8 @@
 import { Wrap, Spinner } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Layout } from '../../components/Layout';
-import PostingItem from '../../components/PostingItem';
-import SearchBox from '../../components/SearchBox';
+import PostingItem from '../../components/board/PostingItem';
+import SearchBox from '../../components/board/SearchBox';
 import { useQueryPosting } from '../../hooks/useQueryPosting';
 
 const BoardPage = () => {

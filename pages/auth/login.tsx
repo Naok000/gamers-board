@@ -2,10 +2,7 @@ import {
   Box,
   Button,
   Flex,
-  FormControl,
-  FormLabel,
   Heading,
-  Input,
   Stack,
   useColorModeValue,
   Link,
@@ -14,6 +11,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
+import AuthFormItem from '../../components/auth/AuthFormItem';
 import { Layout } from '../../components/Layout';
 import { getUserSession } from '../../hooks/useQueryUser';
 import { currentUserId } from '../../recoil/boardState';
@@ -83,24 +81,20 @@ const Login = () => {
             p={8}
           >
             <Stack spacing={4}>
-              <FormControl id='email' isRequired>
-                <FormLabel>Email address</FormLabel>
-                <Input
-                  type='email'
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </FormControl>
-              <FormControl id='password' isRequired>
-                <FormLabel>Password</FormLabel>
-                <Input
-                  type='password'
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </FormControl>
+              <AuthFormItem
+                id='email'
+                label='Email address'
+                type='email'
+                value={email}
+                changeAct={(e) => setEmail(e.target.value)}
+              />
+              <AuthFormItem
+                id='password'
+                label='Password'
+                type='password'
+                value={password}
+                changeAct={(e) => setPassword(e.target.value)}
+              />
               <Stack spacing={4}>
                 <Stack
                   direction={{ base: 'column', sm: 'row' }}
