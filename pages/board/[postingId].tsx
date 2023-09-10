@@ -4,15 +4,12 @@ import {
   Button,
   Center,
   Flex,
-  FormControl,
   Heading,
   HStack,
   Img,
-  Spacer,
   Spinner,
   Stack,
   Text,
-  Textarea,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -24,11 +21,11 @@ import { ArrowBackIcon, ChatIcon } from '@chakra-ui/icons';
 import { useMutatePosting } from '../../hooks/useMutatePosting';
 import { useQueryUser } from '../../hooks/useQueryUser';
 import { Layout } from '../../components/Layout';
-import { MdClose, MdOutlinePostAdd } from 'react-icons/md';
 import { deleteObject, ref } from 'firebase/storage';
 import { storage, storageImageFileRef } from '../../lib/firebase';
 import AlertDeleteDialog from '../../components/board/AlertDeleteDialog';
 import CommentItem from '../../components/board/CommentItem';
+import CommentForm from '../../components/board/CommentForm';
 
 const DetailPostingPage = () => {
   const router = useRouter();
@@ -179,41 +176,17 @@ const DetailPostingPage = () => {
                 ))}
             </Stack>
             {openComments && (
-              <Stack bg='white' mt={2} p={2} borderRadius='lg'>
-                <FormControl id='comment'>
-                  <Box>
-                    <Textarea
-                      name='comment'
-                      placeholder='Enter new comment...'
-                      value={comment}
-                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                        setComment(e.target.value)
-                      }
-                    />
-                  </Box>
-                </FormControl>
-                <HStack>
-                  <Spacer />
-                  <Button
-                    leftIcon={<MdOutlinePostAdd />}
-                    isDisabled={!comment}
-                    type='submit'
-                    colorScheme='teal'
-                    onClick={newComment}
-                  >
-                    post
-                  </Button>
-                  <Button
-                    leftIcon={<MdClose />}
-                    onClick={() => {
-                      setOpenComments(!openComments);
-                      setComment('');
-                    }}
-                  >
-                    Close
-                  </Button>
-                </HStack>
-              </Stack>
+              <CommentForm
+                comment={comment}
+                changeAct={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                  setComment(e.target.value)
+                }
+                postAct={newComment}
+                closeAct={() => {
+                  setOpenComments(!openComments);
+                  setComment('');
+                }}
+              />
             )}
           </Box>
         </Layout>
