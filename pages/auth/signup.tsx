@@ -6,11 +6,9 @@ import {
   FormControl,
   FormLabel,
   Heading,
-  Input,
   Link,
   Stack,
   useColorModeValue,
-  IconButton,
   Avatar,
   AvatarBadge,
 } from '@chakra-ui/react';
@@ -25,9 +23,10 @@ import { generateFileName } from '../../utils/generateFileName';
 import { currentUserId } from '../../recoil/boardState';
 import { toastSummary } from '../../utils/toastSummary';
 import { Layout } from '../../components/Layout';
-import { hiddenInputFeature } from '../../utils/hiddenInputFeature';
+import { hiddenInputFeature } from '../../components/input_file_image/hiddenInputFeature';
 import { INIT_SIGNUP_DATA } from '../../consts/auth/stateInit';
 import AuthFormItem from '../../components/auth/AuthFormItem';
+import InputFileIconButton from '../../components/input_file_image/InputFileIconButton';
 
 const signup = () => {
   const router = useRouter();
@@ -104,19 +103,14 @@ const signup = () => {
               <Box textAlign='center'>
                 <FormControl id='avatar'>
                   <FormLabel>Select Avatar</FormLabel>
-                  <Input
-                    id='avatar'
-                    type='file'
-                    ref={inputRef}
-                    accept='image/*'
-                    hidden
-                    onChange={onChangeImageHandler}
-                  />
-                  <IconButton
-                    aria-label='avatar'
-                    icon={
+                  <InputFileIconButton
+                    name='avatar'
+                    label='avatar'
+                    inputReference={inputRef}
+                    changeAct={onChangeImageHandler}
+                    iconElement={
                       avatarImg ? (
-                        <Avatar bg='teal.500' src={previewImg}>
+                        <Avatar src={previewImg}>
                           <AvatarBadge boxSize='1.25rem' bg='blue.500' />
                         </Avatar>
                       ) : (
@@ -125,7 +119,7 @@ const signup = () => {
                         </Avatar>
                       )
                     }
-                    onClick={onButtonClick}
+                    clickAct={onButtonClick}
                   />
                 </FormControl>
               </Box>
