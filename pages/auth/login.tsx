@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Flex,
   Heading,
   Stack,
@@ -12,6 +11,7 @@ import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import AuthFormItem from '../../components/auth/AuthFormItem';
+import CommonButton from '../../components/CommonButton';
 import { Layout } from '../../components/Layout';
 import { getUserSession } from '../../hooks/useQueryUser';
 import { currentUserId } from '../../recoil/boardState';
@@ -106,27 +106,25 @@ const Login = () => {
                     Create a new Account
                   </Link>
                 </Stack>
-                <Button
+                <CommonButton
                   bg={'blue.400'}
                   color={'white'}
-                  _hover={{
+                  hover={{
                     bg: 'blue.500',
                   }}
-                  onClick={signInEmail}
-                  isDisabled={!email || !password}
-                >
-                  Sign in
-                </Button>
-                <Button
+                  clickAct={signInEmail}
+                  disable={!email || !password}
+                  text='Sign In'
+                />
+                <CommonButton
                   bg={'orange.400'}
                   color={'white'}
-                  _hover={{
+                  hover={{
                     bg: 'orange.500',
                   }}
-                  onClick={testSignIn}
-                >
-                  Guest Login
-                </Button>
+                  clickAct={testSignIn}
+                  text='Guest Login'
+                />
               </Stack>
             </Stack>
           </Box>
