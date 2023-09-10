@@ -10,7 +10,6 @@ import {
   useColorModeValue,
   Flex,
   Box,
-  IconButton,
   HStack,
   FormHelperText,
   Img,
@@ -23,7 +22,8 @@ import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from '../../lib/firebase';
 import { generateFileName } from '../../utils/generateFileName';
 import { MdAddPhotoAlternate } from 'react-icons/md';
-import { hiddenInputFeature } from '../../utils/hiddenInputFeature';
+import { hiddenInputFeature } from '../../components/input_file_image/hiddenInputFeature';
+import InputFileIconButton from '../../components/input_file_image/InputFileIconButton';
 
 const CreatePosting = () => {
   const router = useRouter();
@@ -106,20 +106,14 @@ const CreatePosting = () => {
             <Stack spacing={5}>
               <FormControl id='thumbnail'>
                 <FormLabel>Select Thumbnail</FormLabel>
-
                 <HStack>
-                  <Input
-                    type='file'
-                    name='file'
-                    ref={inputRef}
-                    accept='image/*'
-                    hidden
-                    onChange={onChangeImageHandler}
-                  />
-                  <IconButton
-                    aria-label='thumbnail'
-                    icon={<MdAddPhotoAlternate />}
-                    onClick={onButtonClick}
+                  <InputFileIconButton
+                    name='thumbnail'
+                    label='thumbnail'
+                    inputReference={inputRef}
+                    changeAct={onChangeImageHandler}
+                    iconElement={<MdAddPhotoAlternate />}
+                    clickAct={onButtonClick}
                   />
                   {previewThumbnail ? (
                     <Box h='160px'>
