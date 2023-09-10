@@ -1,7 +1,6 @@
 import {
   Text,
   Box,
-  Button,
   Flex,
   FormControl,
   FormLabel,
@@ -27,6 +26,7 @@ import { hiddenInputFeature } from '../../components/input_file_image/hiddenInpu
 import { INIT_SIGNUP_DATA } from '../../consts/auth/stateInit';
 import AuthFormItem from '../../components/auth/AuthFormItem';
 import InputFileIconButton from '../../components/input_file_image/InputFileIconButton';
+import CommonButton from '../../components/CommonButton';
 
 const signup = () => {
   const router = useRouter();
@@ -151,21 +151,20 @@ const signup = () => {
                 }
               />
               <Stack spacing={4}>
-                <Button
+                <CommonButton
                   bg={'blue.400'}
                   color={'white'}
-                  _hover={{
+                  hover={{
                     bg: 'blue.500',
                   }}
-                  onClick={signupInEmail}
-                  isDisabled={
+                  clickAct={signupInEmail}
+                  disable={
                     !signUpUser.userName ||
                     !signUpUser.email ||
                     !signUpUser.password
                   }
-                >
-                  Sign up
-                </Button>
+                  text='Sign up'
+                />
                 <Stack pt={3}>
                   <Text align={'center'}>
                     Already a user?{' '}

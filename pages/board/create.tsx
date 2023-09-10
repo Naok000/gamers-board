@@ -4,7 +4,6 @@ import {
   Input,
   FormLabel,
   Stack,
-  Button,
   Select,
   Textarea,
   useColorModeValue,
@@ -24,6 +23,7 @@ import { generateFileName } from '../../utils/generateFileName';
 import { MdAddPhotoAlternate } from 'react-icons/md';
 import { hiddenInputFeature } from '../../components/input_file_image/hiddenInputFeature';
 import InputFileIconButton from '../../components/input_file_image/InputFileIconButton';
+import CommonButton from '../../components/CommonButton';
 
 const CreatePosting = () => {
   const router = useRouter();
@@ -176,17 +176,16 @@ const CreatePosting = () => {
                 />
               </FormControl>
 
-              <Button
-                isDisabled={
+              <CommonButton
+                bg={'teal'}
+                clickAct={() => addPosting()}
+                text='Create Posting'
+                disable={
                   !newPosting.gameTitle ||
                   newPosting.gameTitle === 'any title' ||
                   !newPosting.title
                 }
-                colorScheme='teal'
-                onClick={() => addPosting()}
-              >
-                Create Posting
-              </Button>
+              />
             </Stack>
           </Box>
         </Stack>
