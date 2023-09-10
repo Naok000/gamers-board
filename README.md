@@ -5,10 +5,11 @@
 
 https://github.com/Naok000/gamers-board/assets/46452998/929984ad-758e-45d2-91a9-8a5401c17a2b
 
-
 ## 機能
 
 - 認証機能
+  - JWT 認証
+  - role-based authentication
 - 投稿機能
 - フィルタリング機能
 - コメント機能
