@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  Button,
   Center,
   Flex,
   Heading,
@@ -26,6 +25,7 @@ import { storage, storageImageFileRef } from '../../lib/firebase';
 import AlertDeleteDialog from '../../components/board/AlertDeleteDialog';
 import CommentItem from '../../components/board/CommentItem';
 import CommentForm from '../../components/board/CommentForm';
+import CommonButton from '../../components/CommonButton';
 
 const DetailPostingPage = () => {
   const router = useRouter();
@@ -87,14 +87,13 @@ const DetailPostingPage = () => {
       {posting && (
         <Layout title={posting.title}>
           <Box maxW={'5xl'} p='12'>
-            <Button
-              leftIcon={<ArrowBackIcon />}
-              onClick={() => router.push('/board')}
+            <CommonButton
+              icon={<ArrowBackIcon />}
+              clickAct={() => router.push('/board')}
               variant='link'
-              colorScheme='whiteAlpha'
-            >
-              Back Main Board
-            </Button>
+              scheme='whiteAlpha'
+              text='Back Main Board'
+            />
             <Center py={6}>
               <Stack
                 borderWidth='1px'
@@ -145,14 +144,13 @@ const DetailPostingPage = () => {
 
                   <HStack color='black' pt={2} pb={2}>
                     <Flex alignItems='center'>
-                      <Button
-                        leftIcon={<ChatIcon pt={1} />}
-                        onClick={() => setOpenComments(!openComments)}
-                        colorScheme='blue'
+                      <CommonButton
+                        icon={<ChatIcon pt={1} />}
+                        clickAct={() => setOpenComments(!openComments)}
+                        scheme='blue'
                         size='sm'
-                      >
-                        Comment
-                      </Button>
+                        text='Comment'
+                      />
                     </Flex>
                     <Flex>
                       {posting.userId === user?.id ? (
