@@ -6,60 +6,22 @@ import {
   useColorModeValue,
   Link,
 } from '@chakra-ui/react';
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import { useState } from 'react';
 import AuthFormItem from '../../components/auth/AuthFormItem';
 import CommonButton from '../../components/CommonButton';
 import { Layout } from '../../components/Layout';
-import { getUserSession } from '../../hooks/useQueryUser';
-import { currentUserId } from '../../recoil/boardState';
-import { toastSummary } from '../../utils/toastSummary';
+import { loginFeature } from '../../utils/auth/loginFeature';
 
 const Login = () => {
-  const router = useRouter();
-  const { errorLoginToast, loginToast } = toastSummary();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const setUserId = useSetRecoilState(currentUserId);
+  const { testSignIn, signInEmail } = loginFeature(
+    setEmail,
+    setPassword,
+    email,
+    password
+  );
 
-  const testUserEmail: string = 'testUser@test.com';
-  const testUserPassword: string = 'uidjopDHJilkjfskkkd84352';
-
-  const testSignIn = async () => {
-    try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-        email: testUserEmail,
-        password: testUserPassword,
-      });
-      const user = await getUserSession();
-      setUserId(user);
-      loginToast();
-      await router.push('/board');
-    } catch (err) {
-      errorLoginToast();
-      console.log(err);
-    }
-  };
-
-  const signInEmail = async () => {
-    try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
-        email,
-        password,
-      });
-      setEmail('');
-      setPassword('');
-      const user = await getUserSession();
-      setUserId(user);
-      loginToast();
-      await router.push('/board');
-    } catch (err) {
-      errorLoginToast();
-      console.log(err);
-    }
-  };
   return (
     <Layout title='Sign In'>
       <Flex
