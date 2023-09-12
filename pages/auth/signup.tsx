@@ -8,30 +8,18 @@ import {
   Link,
   Stack,
   useColorModeValue,
-  Avatar,
-  AvatarBadge,
 } from '@chakra-ui/react';
-import axios from 'axios';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { getUserSession } from '../../hooks/useQueryUser';
-import { storage } from '../../lib/firebase';
-import { generateFileName } from '../../utils/generateFileName';
-import { currentUserId } from '../../recoil/boardState';
-import { toastSummary } from '../../utils/toastSummary';
 import { Layout } from '../../components/Layout';
 import { hiddenInputFeature } from '../../components/input_file_image/hiddenInputFeature';
 import { INIT_SIGNUP_DATA } from '../../consts/auth/stateInit';
 import AuthFormItem from '../../components/auth/AuthFormItem';
 import InputFileIconButton from '../../components/input_file_image/InputFileIconButton';
 import CommonButton from '../../components/CommonButton';
+import { signupFeature } from '../../utils/auth/signupFeature';
+import AvatarWithBadge from '../../components/auth/AvatarWithBadge';
 
 const signup = () => {
-  const router = useRouter();
-  const { successCreateAcountToast } = toastSummary();
-  const setUserId = useSetRecoilState(currentUserId);
   const [avatarImg, setAvatarImg] = useState<File | null>(null);
   const [previewImg, setPreviewImg] = useState<string>('');
 
@@ -42,44 +30,14 @@ const signup = () => {
     setPreviewImg
   );
 
-  const signupInEmail = async () => {
-    const postSignUp = async () => {
-      return await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
-        {
-          ...signUpUser,
-        }
-      );
-    };
-    try {
-      if (avatarImg) {
-        signUpUser.fileName = generateFileName(avatarImg.name);
-        const refStorageAvatars = ref(
-          storage,
-          `avatars/${signUpUser.fileName}`
-        );
-
-        await uploadBytes(refStorageAvatars, avatarImg);
-        signUpUser.url = await getDownloadURL(refStorageAvatars);
-
-        await postSignUp();
-      } else {
-        signUpUser.url = await getDownloadURL(
-          ref(storage, 'default_avatar/AdobeStock_64675209.jpeg')
-        );
-        await postSignUp();
-      }
-      setSignUpUser(INIT_SIGNUP_DATA);
-      const user = await getUserSession();
-      setUserId(user);
-      successCreateAcountToast();
-      URL.revokeObjectURL(previewImg);
-      setPreviewImg('');
-      await router.push('/board');
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const { signupInEmail } = signupFeature(
+    signUpUser,
+    avatarImg,
+    setAvatarImg,
+    setSignUpUser,
+    setPreviewImg,
+    previewImg
+  );
 
   return (
     <Layout title='Sign Up'>
@@ -110,13 +68,9 @@ const signup = () => {
                     changeAct={onChangeImageHandler}
                     iconElement={
                       avatarImg ? (
-                        <Avatar src={previewImg}>
-                          <AvatarBadge boxSize='1.25rem' bg='blue.500' />
-                        </Avatar>
+                        <AvatarWithBadge src={previewImg} badgeBg='blue.500' />
                       ) : (
-                        <Avatar bg='teal.500'>
-                          <AvatarBadge boxSize='1.25rem' bg='red' />
-                        </Avatar>
+                        <AvatarWithBadge avatarBg='teal.500' badgeBg='red' />
                       )
                     }
                     clickAct={onButtonClick}
