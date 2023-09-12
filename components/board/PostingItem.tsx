@@ -3,13 +3,13 @@ import {
   Flex,
   Heading,
   HStack,
-  Img,
   Link,
   WrapItem,
   Text,
 } from '@chakra-ui/react';
 import { BsArrowUpRight } from 'react-icons/bs';
 import { postingWithImage } from '../../hooks/types/queryType';
+import Thumbnail from './Thumbnail';
 
 type Props = {
   posting: postingWithImage;
@@ -29,15 +29,12 @@ const PostingItem = ({ posting }: Props) => {
         borderColor='black'
         boxShadow='xl'
       >
-        <Box h='160px' borderBottom={'1px'} borderColor='black'>
-          <Img
-            alt='thumbnail'
-            src={posting.thumbnail.imageURL}
-            h='full'
-            w='full'
-            objectFit='cover'
-          />
-        </Box>
+        <Thumbnail
+          height='160px'
+          borderBottom='1px'
+          borderColor='black'
+          src={posting.thumbnail.imageURL}
+        />
         <Box p={4}>
           <Box>
             <Text fontSize={'xs'} fontWeight='medium'>

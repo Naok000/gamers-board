@@ -11,7 +11,6 @@ import {
   Box,
   HStack,
   FormHelperText,
-  Img,
 } from '@chakra-ui/react';
 import { useMutatePosting } from '../../hooks/useMutatePosting';
 import { useState } from 'react';
@@ -24,6 +23,7 @@ import { MdAddPhotoAlternate } from 'react-icons/md';
 import { hiddenInputFeature } from '../../components/input_file_image/hiddenInputFeature';
 import InputFileIconButton from '../../components/input_file_image/InputFileIconButton';
 import CommonButton from '../../components/CommonButton';
+import Thumbnail from '../../components/board/Thumbnail';
 
 const CreatePosting = () => {
   const router = useRouter();
@@ -116,15 +116,7 @@ const CreatePosting = () => {
                     clickAct={onButtonClick}
                   />
                   {previewThumbnail ? (
-                    <Box h='160px'>
-                      <Img
-                        alt='thumbnail'
-                        src={previewThumbnail}
-                        h='full'
-                        w='full'
-                        objectFit='cover'
-                      />
-                    </Box>
+                    <Thumbnail height='160px' src={previewThumbnail} />
                   ) : (
                     <></>
                   )}
