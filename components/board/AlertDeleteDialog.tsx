@@ -12,11 +12,10 @@ import {
 import { useRef } from 'react';
 
 type Props = {
-  id: string | string[] | undefined;
-  action: (id: string | string[] | undefined) => Promise<void>;
+  action: () => Promise<void>;
 };
 
-const AlertDeleteDialog = ({ id, action }: Props) => {
+const AlertDeleteDialog = ({ action }: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
 
@@ -52,7 +51,7 @@ const AlertDeleteDialog = ({ id, action }: Props) => {
               <Button ref={cancelRef} onClick={onClose}>
                 Cancel
               </Button>
-              <Button colorScheme='red' onClick={() => action(id)} ml={3}>
+              <Button colorScheme='red' onClick={() => action()} ml={3}>
                 Delete
               </Button>
             </AlertDialogFooter>
