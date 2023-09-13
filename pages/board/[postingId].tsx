@@ -11,76 +11,45 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import {
   useQueryComment,
   useQueryPostingId,
 } from '../../hooks/useQueryPosting';
 import { ArrowBackIcon, ChatIcon } from '@chakra-ui/icons';
-import { useMutatePosting } from '../../hooks/useMutatePosting';
 import { useQueryUser } from '../../hooks/useQueryUser';
 import { Layout } from '../../components/Layout';
-import { deleteObject, ref } from 'firebase/storage';
-import { storage, storageImageFileRef } from '../../lib/firebase';
 import AlertDeleteDialog from '../../components/board/AlertDeleteDialog';
 import CommentItem from '../../components/board/CommentItem';
 import CommentForm from '../../components/board/CommentForm';
 import CommonButton from '../../components/CommonButton';
+import { postingInternalFunc } from '../../utils/board/postingInternalFunc';
 
 const DetailPostingPage = () => {
   const router = useRouter();
   const { postingId } = router.query;
   const [openComments, setOpenComments] = useState(false);
   const [comment, setComment] = useState('');
-  const { commentPostingMutation, deletePostingMutation } =
-    useMutatePosting(postingId);
 
   const { data: user, status } = useQueryUser();
   const { data: posting } = useQueryPostingId(postingId);
   const { data: comments, isSuccess } = useQueryComment(postingId);
+
+  // Ability to post comments and delete listings
+  const { newComment, deletePosting } = postingInternalFunc(
+    comment,
+    postingId,
+    posting,
+    setComment,
+    setOpenComments,
+    router
+  );
 
   if (status === 'error') {
     router.push('/auth/login');
   } else if (status === 'loading') {
     return <Spinner size={'xl'} />;
   }
-
-  const newComment = async () => {
-    if (comment?.trim() === '') {
-      return;
-    }
-    try {
-      commentPostingMutation.mutate({ comment });
-      setComment('');
-      setOpenComments(false);
-    } catch (err) {
-      console.error('Faild to post a comment', err);
-    }
-  };
-
-  const deletePosting = async (id: string | string[] | undefined) => {
-    deletePostingMutation.mutate(id);
-    if (
-      !ref(
-        storage,
-        storageImageFileRef + `/default_images/${posting?.gameTitle}.jpg`
-      )
-    )
-      await deleteObject(
-        ref(
-          storage,
-          storageImageFileRef +
-            `/images/${posting?.thumbnail.thumbnailFileName}`
-        )
-      )
-        .then(() => {
-          console.log('File deleted successfully');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    await router.push('/board');
-  };
 
   return (
     <>
@@ -154,10 +123,7 @@ const DetailPostingPage = () => {
                     </Flex>
                     <Flex>
                       {posting.userId === user?.id ? (
-                        <AlertDeleteDialog
-                          id={postingId}
-                          action={() => deletePosting(postingId)}
-                        />
+                        <AlertDeleteDialog action={() => deletePosting()} />
                       ) : (
                         <></>
                       )}
@@ -176,7 +142,7 @@ const DetailPostingPage = () => {
             {openComments && (
               <CommentForm
                 comment={comment}
-                changeAct={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                changeAct={(e: ChangeEvent<HTMLTextAreaElement>) =>
                   setComment(e.target.value)
                 }
                 postAct={newComment}
