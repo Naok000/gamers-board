@@ -38,5 +38,11 @@ export type userProfile = {
   id: string;
   userName: string;
   createdAt: Date;
-  avatar: { avatarImgURL: string };
+  avatar: { avatarImgURL: string; avatarFileName: string };
+};
+
+export type avatar = {
+  id: string;
+  avatarFileName?: string;
+  avatarImgURL: string;
 };
