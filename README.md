@@ -13,6 +13,7 @@ https://github.com/Naok000/gamers-board/assets/46452998/929984ad-758e-45d2-91a9-
 - 投稿機能
 - フィルタリング機能
 - コメント機能
+- 退会機能
 - アバター画像の設定
 
 ## 使用技術
@@ -43,7 +44,6 @@ https://github.com/Naok000/gamers-board/assets/46452998/929984ad-758e-45d2-91a9-
 ## 実装予定機能及び行いたいこと
 
 - アバター画像の変更
-- 退会機能
 - google 認証
 - like 機能
 - ブックマーク機能
