@@ -40,7 +40,7 @@ export const postingInternalFunc = (
         ref(
           storage,
           storageImageFileRef +
-            `/images/${posting?.thumbnail.thumbnailFileName}`
+            `/images/${posting?.userId}/${posting?.thumbnail.thumbnailFileName}`
         )
       )
         .then(() => {
