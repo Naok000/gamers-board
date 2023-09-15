@@ -16,7 +16,7 @@ import {
   useQueryComment,
   useQueryPostingId,
 } from '../../hooks/useQueryPosting';
-import { ArrowBackIcon, ChatIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, ChatIcon, DeleteIcon } from '@chakra-ui/icons';
 import { useQueryUser } from '../../hooks/useQueryUser';
 import { Layout } from '../../components/Layout';
 import AlertDeleteDialog from '../../components/board/AlertDeleteDialog';
@@ -123,7 +123,12 @@ const DetailPostingPage = () => {
                     </Flex>
                     <Flex>
                       {posting.userId === user?.id ? (
-                        <AlertDeleteDialog action={() => deletePosting()} />
+                        <AlertDeleteDialog
+                          action={() => deletePosting()}
+                          icon={<DeleteIcon />}
+                          dialogHeader='Delete Posting'
+                          dialogBody='Listings and posted comments will be removed'
+                        />
                       ) : (
                         <></>
                       )}

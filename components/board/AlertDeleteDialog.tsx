@@ -1,4 +1,3 @@
-import { DeleteIcon } from '@chakra-ui/icons';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -6,31 +5,38 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogOverlay,
-  Button,
   useDisclosure,
 } from '@chakra-ui/react';
-import { useRef } from 'react';
+import { JSXElementConstructor, ReactElement, useRef } from 'react';
+import CommonButton from '../CommonButton';
 
 type Props = {
   action: () => Promise<void>;
+  icon: ReactElement<any, string | JSXElementConstructor<any>> | undefined;
+  dialogHeader: string;
+  dialogBody: string;
 };
 
-const AlertDeleteDialog = ({ action }: Props) => {
+const AlertDeleteDialog = ({
+  action,
+  icon,
+  dialogHeader,
+  dialogBody,
+}: Props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef(null);
 
   return (
     <>
-      <Button
-        leftIcon={<DeleteIcon />}
+      <CommonButton
+        icon={icon}
         mx={1}
         size='sm'
-        colorScheme='red'
+        scheme='red'
         variant='solid'
-        onClick={onOpen}
-      >
-        Delete
-      </Button>
+        clickAct={onOpen}
+        text='Delete'
+      />
 
       <AlertDialog
         isOpen={isOpen}
@@ -40,20 +46,23 @@ const AlertDeleteDialog = ({ action }: Props) => {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-              Delete Posting
+              {dialogHeader}
             </AlertDialogHeader>
 
-            <AlertDialogBody>
-              Listings and posted comments will be removed
-            </AlertDialogBody>
+            <AlertDialogBody>{dialogBody}</AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
-                Cancel
-              </Button>
-              <Button colorScheme='red' onClick={() => action()} ml={3}>
-                Delete
-              </Button>
+              <CommonButton
+                reference={cancelRef}
+                clickAct={onClose}
+                text='Cancel'
+              />
+              <CommonButton
+                scheme='red'
+                clickAct={() => action()}
+                ml={3}
+                text='Delete'
+              />
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialogOverlay>
