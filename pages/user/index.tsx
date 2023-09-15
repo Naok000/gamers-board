@@ -11,17 +11,25 @@ import {
   Avatar,
   Center,
   Spinner,
+  Menu,
+  MenuButton,
+  Button,
+  MenuList,
+  MenuItem,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import React from 'react';
 import { BsArrowUpRight } from 'react-icons/bs';
+import { TbUserOff } from 'react-icons/tb';
+import { GrUserSettings } from 'react-icons/gr';
 import { Layout } from '../../components/Layout';
+import { useMutateUser } from '../../hooks/useMutateUser';
 import { useQueryOwnPosting } from '../../hooks/useQueryPosting';
 import { useQueryUser } from '../../hooks/useQueryUser';
 
 const MyPage = () => {
   const { data: user, status } = useQueryUser();
   const { data: ownPosting } = useQueryOwnPosting();
+  const { deleteUserMutation } = useMutateUser();
   if (status === 'loading') return <Spinner />;
 
   return (
@@ -57,6 +65,23 @@ const MyPage = () => {
                 Joined
               </Heading>
               <Box>{new Date(user.createdAt).toDateString()}</Box>
+              <Menu variant='ghost'>
+                <MenuButton as={Button} leftIcon={<GrUserSettings />}>
+                  Settings
+                </MenuButton>
+                <MenuList>
+                  <MenuItem
+                    onClick={() => deleteUserMutation.mutate()}
+                    isDisabled={
+                      user.userName === 'testuser' ||
+                      user.userName === 'Test_User'
+                    }
+                  >
+                    <TbUserOff />
+                    <span>Delete User</span>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
             </Box>
           </Center>
         )}
