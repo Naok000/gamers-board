@@ -24,6 +24,8 @@ import { hiddenInputFeature } from '../../components/input_file_image/hiddenInpu
 import InputFileIconButton from '../../components/input_file_image/InputFileIconButton';
 import CommonButton from '../../components/CommonButton';
 import Thumbnail from '../../components/board/Thumbnail';
+import { useRecoilValue } from 'recoil';
+import { currentUserId } from '../../recoil/boardState';
 
 const CreatePosting = () => {
   const router = useRouter();
@@ -34,6 +36,7 @@ const CreatePosting = () => {
     imageURL: '',
   };
   const { createPostingMutation } = useMutatePosting();
+  const sessionUserId = useRecoilValue(currentUserId)?.id;
   const [newPosting, setPosting] = useState(initPosting);
   const [postingThumbnail, setPostingThumbnail] = useState<File | null>(null);
   const [previewThumbnail, setPreviewThumbnail] = useState<string>('');
@@ -45,7 +48,7 @@ const CreatePosting = () => {
   const addPosting = async () => {
     if (postingThumbnail) {
       const fileName = generateFileName(postingThumbnail.name);
-      const storageRef = ref(storage, `images/${fileName}`);
+      const storageRef = ref(storage, `images/${sessionUserId}/${fileName}`);
 
       const uploadThumbnailImage = uploadBytesResumable(
         storageRef,

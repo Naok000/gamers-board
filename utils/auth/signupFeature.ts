@@ -44,7 +44,7 @@ export const signupFeature = (
         signUpUser.fileName = generateFileName(avatar.name);
         const refStorageAvatars = ref(
           storage,
-          `avatars/${signUpUser.fileName}`
+          `avatars/${signUpUser.userName}/${signUpUser.fileName}`
         );
 
         await uploadBytes(refStorageAvatars, avatar);
