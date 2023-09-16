@@ -2,11 +2,6 @@ import {
   Box,
   Text,
   Heading,
-  TableContainer,
-  Tbody,
-  Tr,
-  Td,
-  Table,
   Flex,
   Avatar,
   Center,
@@ -17,14 +12,13 @@ import {
   MenuList,
   MenuItem,
 } from '@chakra-ui/react';
-import Link from 'next/link';
-import { BsArrowUpRight } from 'react-icons/bs';
 import { TbUserOff } from 'react-icons/tb';
 import { GrUserSettings } from 'react-icons/gr';
 import { Layout } from '../../components/Layout';
 import { useMutateUser } from '../../hooks/useMutateUser';
 import { useQueryOwnPosting } from '../../hooks/useQueryPosting';
 import { useQueryUser } from '../../hooks/useQueryUser';
+import OwnPostingItem from '../../components/user/OwnPostingItem';
 
 const MyPage = () => {
   const { data: user, status } = useQueryUser();
@@ -99,25 +93,7 @@ const MyPage = () => {
           </Heading>
           {ownPosting?.length !== 0 ? (
             ownPosting?.map((post) => (
-              <TableContainer key={post.id}>
-                <Table>
-                  <Tbody>
-                    <Tr>
-                      <Td>
-                        <Heading size='sm'>{post.title}</Heading>
-                        <Box color='gray.400'>{post.gameTitle}</Box>
-                      </Td>
-                      <Td>
-                        <Flex justifyContent='end'>
-                          <Link href={`board/${post.id}`}>
-                            <BsArrowUpRight />
-                          </Link>
-                        </Flex>
-                      </Td>
-                    </Tr>
-                  </Tbody>
-                </Table>
-              </TableContainer>
+              <OwnPostingItem key={post.id} post={post} />
             ))
           ) : (
             <Flex alignItems='center' justify='center' justifyContent='center'>
