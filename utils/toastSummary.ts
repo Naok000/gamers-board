@@ -25,6 +25,17 @@ export const toastSummary = () => {
     });
   };
 
+  const logoutToast = () => {
+    return toast({
+      title: 'See you again.',
+      description: 'Waiting for your next visit.',
+      position: 'top',
+      status: 'success',
+      duration: 7000,
+      isClosable: true,
+    });
+  };
+
   const successCreateAcountToast = () => {
     return toast({
       title: 'Account created.',
@@ -36,5 +47,5 @@ export const toastSummary = () => {
     });
   };
 
-  return { loginToast, errorLoginToast, successCreateAcountToast };
+  return { loginToast, errorLoginToast, successCreateAcountToast, logoutToast };
 };
