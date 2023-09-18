@@ -21,19 +21,15 @@ import {
   ChevronDownIcon,
   ChevronRightIcon,
 } from '@chakra-ui/icons';
-import { useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
-import axios from 'axios';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { currentUserId } from '../recoil/boardState';
-import { destroyCookie } from 'nookies';
 import {
   MdOutlineLogout,
   MdOutlineLogin,
   MdAppRegistration,
   MdAdminPanelSettings,
 } from 'react-icons/md';
-import { COMMENT, OWN_POSTING, POSTING, USER } from '../consts/queryKey';
+import { logoutFeature } from '../utils/auth/logoutFeature';
 
 interface NavItem {
   label: string;
@@ -58,22 +54,9 @@ const NAV_ITEMS: Array<NavItem> = [
 
 const WithSubnavigation = () => {
   const { isOpen, onToggle } = useDisclosure();
-  const queryClient = useQueryClient();
-  const router = useRouter();
   const user = useRecoilValue(currentUserId);
-  const setUser = useSetRecoilState(currentUserId);
 
-  const handleLogout = async () => {
-    // キャッシュに格納されている情報をログアウト時に消去する
-    queryClient.removeQueries([POSTING]);
-    queryClient.removeQueries([COMMENT]);
-    queryClient.removeQueries([USER]);
-    queryClient.removeQueries([OWN_POSTING]);
-    destroyCookie(null, USER, '/');
-    setUser(undefined);
-    await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/logout`);
-    await router.push('/board');
-  };
+  const { handleLogout } = logoutFeature();
 
   return (
     <Box mb={0}>
