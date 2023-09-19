@@ -47,5 +47,22 @@ export const toastSummary = () => {
     });
   };
 
-  return { loginToast, errorLoginToast, successCreateAcountToast, logoutToast };
+  const notAuthorizedAlertToast = () => {
+    return toast({
+      title: 'Not authorized.',
+      description: 'Operation not accepted due to lack of authorization',
+      position: 'top',
+      status: 'error',
+      duration: 9000,
+      isClosable: true,
+    });
+  };
+
+  return {
+    loginToast,
+    errorLoginToast,
+    successCreateAcountToast,
+    logoutToast,
+    notAuthorizedAlertToast,
+  };
 };

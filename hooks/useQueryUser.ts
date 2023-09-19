@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { User } from '@prisma/client';
 import { userProfile } from './types/queryType';
 import { USER } from '../consts/queryKey';
+import { toastSummary } from '../utils/toastSummary';
 
 export const getUserSession = async () => {
   const { data } = await axios.get<Omit<User, 'password'>>(
@@ -14,6 +15,7 @@ export const getUserSession = async () => {
 
 export const useQueryUser = () => {
   const router = useRouter();
+  const { notAuthorizedAlertToast } = toastSummary();
   const getUser = async () => {
     const { data } = await axios.get<userProfile>(
       `${process.env.NEXT_PUBLIC_API_URL}/user`
@@ -26,7 +28,8 @@ export const useQueryUser = () => {
     queryFn: getUser,
     onError: (err: any) => {
       if (err.response.status === 401 || err.response.status === 403)
-        router.push('/auth/login');
+        notAuthorizedAlertToast();
+      router.push('/auth/login');
     },
   });
 };

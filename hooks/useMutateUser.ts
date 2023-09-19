@@ -9,6 +9,7 @@ import { destroyCookie } from 'nookies';
 import { useSetRecoilState } from 'recoil';
 import { USER } from '../consts/queryKey';
 import { currentUserId } from '../recoil/boardState';
+import { toastSummary } from '../utils/toastSummary';
 import { userProfile, avatar } from './types/queryType';
 
 export const useMutateUser = (): {
@@ -23,6 +24,7 @@ export const useMutateUser = (): {
   const queryClient = useQueryClient();
   const router = useRouter();
   const setUser = useSetRecoilState(currentUserId);
+  const { notAuthorizedAlertToast } = toastSummary();
 
   const updateAvatarMutation = useMutation(
     async (avatar: Omit<avatar, 'id'>) => {
@@ -43,6 +45,7 @@ export const useMutateUser = (): {
       onError: (err: any, context) => {
         if (err.response.status === 401 || err.response.status === 403) {
           console.log(err);
+          notAuthorizedAlertToast();
           router.push('/board');
         }
       },
@@ -69,6 +72,7 @@ export const useMutateUser = (): {
       onError: (err: any) => {
         if (err.response.status === 401 || err.response.status === 403) {
           console.error(err);
+          notAuthorizedAlertToast();
           router.push('/board');
         }
       },
