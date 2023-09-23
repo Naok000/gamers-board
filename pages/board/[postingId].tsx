@@ -35,7 +35,6 @@ const DetailPostingPage = () => {
 
   // Ability to post comments and delete listings
   const { newComment, deletePosting } = postingInternalFunc(
-    comment,
     postingId,
     posting,
     setComment,
@@ -129,7 +128,7 @@ const DetailPostingPage = () => {
                 changeAct={(e: ChangeEvent<HTMLTextAreaElement>) =>
                   setComment(e.target.value)
                 }
-                postAct={newComment}
+                postAct={() => newComment(comment)}
                 closeAct={() => {
                   setOpenComments(!openComments);
                   setComment('');

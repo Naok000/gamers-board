@@ -6,7 +6,6 @@ import { useMutatePosting } from '../../hooks/useMutatePosting';
 import { storage, storageImageFileRef } from '../../lib/firebase';
 
 export const postingInternalFunc = (
-  comment: string,
   postingId: string | string[] | undefined,
   posting: postingById | undefined,
   resetCommentValue: Dispatch<SetStateAction<string>>,
@@ -15,7 +14,7 @@ export const postingInternalFunc = (
 ) => {
   const { commentPostingMutation, deletePostingMutation } =
     useMutatePosting(postingId);
-  const newComment = async () => {
+  const newComment = async (comment: string) => {
     if (comment?.trim() === '') {
       return;
     }
