@@ -102,7 +102,7 @@ const DetailPostingPage = () => {
                     <Flex>
                       {posting.userId === user?.id ? (
                         <AlertDeleteDialog
-                          action={() => deletePosting()}
+                          action={() => deletePosting(posting.id)}
                           icon={<DeleteIcon />}
                           dialogHeader='Delete Posting'
                           dialogBody='Listings and posted comments will be removed'

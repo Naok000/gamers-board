@@ -27,8 +27,8 @@ export const postingInternalFunc = (
     }
   };
 
-  const deletePosting = async () => {
-    deletePostingMutation.mutate(postingId);
+  const deletePosting = async (id: string) => {
+    deletePostingMutation.mutate(id);
     if (
       !ref(
         storage,
