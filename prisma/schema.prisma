@@ -8,14 +8,15 @@ datasource db {
 }
 
 model User {
-  id        String    @id
-  createdAt DateTime  @default(now())
+  id        String     @id
+  createdAt DateTime   @default(now())
   updateAt  DateTime
-  email     String    @unique
+  email     String     @unique
   password  String
   userName  String?
   role      UserRole
   Avatar    Avatar?
+  BookMark  BookMark[]
   comments  Comment[]
   posts     Posting[]
 }
@@ -39,6 +40,7 @@ model Posting {
   userId      String
   gameTitle   String
   thumbnailId String     @unique
+  BookMark    BookMark?
   Comment     Comment[]
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   Thumbnail   Thumbnail?
@@ -58,6 +60,14 @@ model Thumbnail {
   imageURL          String
   thumbnailFileName String
   Posting           Posting @relation(fields: [postingId], references: [id], onDelete: Cascade)
+}
+
+model BookMark {
+  id        String  @id
+  postingId String  @unique
+  userId    String
+  Posting   Posting @relation(fields: [postingId], references: [id], onDelete: Cascade)
+  User      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum UserRole {
