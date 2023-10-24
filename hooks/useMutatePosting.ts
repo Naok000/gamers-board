@@ -3,10 +3,10 @@ import {
   UseMutationResult,
   useQueryClient,
 } from '@tanstack/react-query';
-import axios from 'axios';
-import { Posting } from '@prisma/client';
+import axios, { AxiosResponse } from 'axios';
+import { Posting, BookMark } from '@prisma/client';
 import { useRouter } from 'next/router';
-import { COMMENT, POSTING } from '../consts/queryKey';
+import { BOOK_MARK, COMMENT, POSTING } from '../consts/queryKey';
 import { posting, comment } from './types/queryType';
 
 export const useMutatePosting = (
@@ -17,6 +17,12 @@ export const useMutatePosting = (
     any,
     Omit<posting, 'id'>,
     unknown
+  >;
+  bookMarkMutation: UseMutationResult<
+    AxiosResponse<any, any>,
+    any,
+    string | string[] | undefined,
+    { previousData: BookMark[] | undefined }
   >;
   commentPostingMutation: UseMutationResult<
     any,
@@ -93,6 +99,32 @@ export const useMutatePosting = (
     }
   );
 
+  const bookMarkMutation = useMutation(
+    async (postingId: string | string[] | undefined) => {
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/board/${postingId}/book-mark`
+      );
+      return res;
+    },
+    {
+      onMutate: async (res) => {
+        await queryClient.cancelQueries([BOOK_MARK]);
+        const previousData = queryClient.getQueryData<BookMark[]>([BOOK_MARK]);
+        if (previousData) {
+          queryClient.setQueryData([BOOK_MARK], [res, ...previousData]);
+        }
+
+        return { previousData };
+      },
+      onError: (err: any) => {
+        if (err.response.status === 401 || err.response.status === 403) {
+          console.log(err);
+          router.push('/board');
+        }
+      },
+    }
+  );
+
   const deletePostingMutation = useMutation(
     async (postingId: string | string[] | undefined) => {
       await axios.delete(
@@ -121,6 +153,7 @@ export const useMutatePosting = (
   return {
     createPostingMutation,
     commentPostingMutation,
+    bookMarkMutation,
     deletePostingMutation,
   };
 };
