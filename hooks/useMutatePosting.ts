@@ -3,7 +3,7 @@ import {
   UseMutationResult,
   useQueryClient,
 } from '@tanstack/react-query';
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { Posting, BookMark } from '@prisma/client';
 import { useRouter } from 'next/router';
 import { BOOK_MARK, COMMENT, POSTING } from '../consts/queryKey';
@@ -19,7 +19,7 @@ export const useMutatePosting = (
     unknown
   >;
   bookMarkMutation: UseMutationResult<
-    AxiosResponse<any, any>,
+    any,
     any,
     string | string[] | undefined,
     { previousData: BookMark[] | undefined }
