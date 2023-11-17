@@ -16,6 +16,10 @@ const nextConfig = withInterceptStdout(
         },
         {
           protocol: 'https',
+          hostname: 'gamers-board.vercel.app',
+        },
+        {
+          protocol: 'https',
           hostname: 'firebasestorage.googleapis.com',
         },
       ],
