@@ -8,6 +8,18 @@ const nextConfig = withInterceptStdout(
     swcMinify: false,
     ignoreDuringBuilds: true,
     staticPageGenerationTimeout: 1000,
+    images: {
+      remotePatterns: [
+        {
+          protocol: 'http',
+          hostname: 'localhost',
+        },
+        {
+          protocol: 'https',
+          hostname: 'firebasestorage.googleapis.com',
+        },
+      ],
+    },
   },
   (text) => (text.includes('Duplicate atom key') ? '' : text)
 );
