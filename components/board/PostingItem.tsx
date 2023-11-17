@@ -30,7 +30,6 @@ const PostingItem = ({ posting }: Props) => {
         boxShadow='xl'
       >
         <Thumbnail
-          height='160px'
           borderBottom='1px'
           borderColor='black'
           src={posting.thumbnail.imageURL}

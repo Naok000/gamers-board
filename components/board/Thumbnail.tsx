@@ -1,17 +1,30 @@
-import { Box, Img } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
+import Image from 'next/image';
 import React from 'react';
 
 type Props = {
-  height: string;
   borderBottom?: string;
   borderColor?: string;
-  src?: string | undefined;
+  src: string;
 };
 
-const Thumbnail = ({ height, borderBottom, borderColor, src }: Props) => {
+const Thumbnail = ({ borderBottom, borderColor, src }: Props) => {
   return (
-    <Box h={height} borderBottom={borderBottom} borderColor={borderColor}>
-      <Img alt='thumbnail' src={src} h='full' w='full' objectFit='cover' />
+    <Box
+      h='auto'
+      w='auto'
+      borderBottom={borderBottom}
+      borderColor={borderColor}
+    >
+      <Image
+        alt='thumbnail'
+        src={src}
+        width='0'
+        height='0'
+        sizes='100vw'
+        style={{ width: '100%', height: 'auto' }}
+        priority={true}
+      />
     </Box>
   );
 };

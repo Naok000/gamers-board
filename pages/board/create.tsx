@@ -119,7 +119,7 @@ const CreatePosting = () => {
                     clickAct={onButtonClick}
                   />
                   {previewThumbnail ? (
-                    <Thumbnail height='160px' src={previewThumbnail} />
+                    <Thumbnail src={previewThumbnail} />
                   ) : (
                     <></>
                   )}
