@@ -22,7 +22,7 @@ export const useMutatePosting = (
     any,
     any,
     string | string[] | undefined,
-    { previousData: BookMark[] | undefined }
+    unknown
   >;
   removeBookMarkMutation: UseMutationResult<
     void,
@@ -113,7 +113,7 @@ export const useMutatePosting = (
       return res;
     },
     {
-      onMutate: async (res) => {
+      onSuccess: async (res) => {
         await queryClient.cancelQueries([BOOK_MARK]);
         const previousData = queryClient.getQueryData<BookMark[]>([BOOK_MARK]);
         if (previousData) {
