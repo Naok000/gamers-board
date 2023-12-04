@@ -8,15 +8,15 @@ datasource db {
 }
 
 model User {
-  id        String     @id
-  createdAt DateTime   @default(now())
+  id        String    @id
+  createdAt DateTime  @default(now())
   updateAt  DateTime
-  email     String     @unique
+  email     String    @unique
   password  String
   userName  String?
   role      UserRole
   Avatar    Avatar?
-  BookMark  BookMark[]
+  BookMark  BookMark?
   comments  Comment[]
   posts     Posting[]
 }
@@ -65,9 +65,11 @@ model Thumbnail {
 model BookMark {
   id        String  @id
   postingId String  @unique
-  userId    String
+  userId    String  @unique
   Posting   Posting @relation(fields: [postingId], references: [id], onDelete: Cascade)
   User      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postingId, userId])
 }
 
 enum UserRole {
