@@ -108,7 +108,7 @@ export const useMutatePosting = (
   const bookMarkAddMutation = useMutation(
     async (postingId: string | string[] | undefined) => {
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/board/${postingId}/book-mark`
+        `${process.env.NEXT_PUBLIC_API_URL}/board/${postingId}/bookmark`
       );
       return res;
     },
@@ -133,7 +133,7 @@ export const useMutatePosting = (
   const removeBookMarkMutation = useMutation(
     async (postingId: string | string[] | undefined) => {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/board/${postingId}/book-mark`
+        `${process.env.NEXT_PUBLIC_API_URL}/board/${postingId}/bookmark`
       );
     },
     {
