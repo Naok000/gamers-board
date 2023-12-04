@@ -47,6 +47,28 @@ export const toastSummary = () => {
     });
   };
 
+  const addBookMarkToast = () => {
+    return toast({
+      title: 'Add Bookmark',
+      description: 'Bookmarked this posting',
+      position: 'top',
+      status: 'success',
+      duration: 9000,
+      isClosable: true,
+    });
+  };
+
+  const removeBookMarkToast = () => {
+    return toast({
+      title: 'Remove Bookmark',
+      description: 'Removed this posting',
+      position: 'top',
+      status: 'success',
+      duration: 9000,
+      isClosable: true,
+    });
+  };
+
   const notAuthorizedAlertToast = () => {
     return toast({
       title: 'Not authorized.',
@@ -63,6 +85,8 @@ export const toastSummary = () => {
     errorLoginToast,
     successCreateAcountToast,
     logoutToast,
+    addBookMarkToast,
+    removeBookMarkToast,
     notAuthorizedAlertToast,
   };
 };
