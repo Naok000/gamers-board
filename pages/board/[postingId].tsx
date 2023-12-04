@@ -22,10 +22,14 @@ import CommentForm from '../../components/board/CommentForm';
 import CommonButton from '../../components/CommonButton';
 import { postingInternalFunc } from '../../utils/board/postingInternalFunc';
 import PostingDetail from '../../components/board/PostingDetail';
+import BookMark from '../../components/board/BookMark';
+import { bookMarkFunc } from '../../utils/board/bookMarkFunc';
 
 const DetailPostingPage = () => {
   const router = useRouter();
   const { postingId } = router.query;
+  // const { bookMarkAddMutation, removeBookMarkMutation } = useMutatePosting();
+  const { addBookMark, removeBookMark } = bookMarkFunc();
   const [openComments, setOpenComments] = useState(false);
   const [comment, setComment] = useState('');
 
@@ -97,6 +101,11 @@ const DetailPostingPage = () => {
                         scheme='blue'
                         size='sm'
                         text='Comment'
+                      />
+                      <BookMark
+                        bookMarkId={posting?.bookMark[0]?.id}
+                        bookMarkAdd={() => addBookMark(postingId)}
+                        bookMarkRemove={() => removeBookMark(postingId)}
                       />
                     </Flex>
                     <Flex>

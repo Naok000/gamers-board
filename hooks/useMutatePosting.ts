@@ -18,11 +18,17 @@ export const useMutatePosting = (
     Omit<posting, 'id'>,
     unknown
   >;
-  bookMarkMutation: UseMutationResult<
+  bookMarkAddMutation: UseMutationResult<
     any,
     any,
     string | string[] | undefined,
     { previousData: BookMark[] | undefined }
+  >;
+  removeBookMarkMutation: UseMutationResult<
+    void,
+    any,
+    string | string[] | undefined,
+    unknown
   >;
   commentPostingMutation: UseMutationResult<
     any,
@@ -99,7 +105,7 @@ export const useMutatePosting = (
     }
   );
 
-  const bookMarkMutation = useMutation(
+  const bookMarkAddMutation = useMutation(
     async (postingId: string | string[] | undefined) => {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/board/${postingId}/book-mark`
@@ -115,6 +121,31 @@ export const useMutatePosting = (
         }
 
         return { previousData };
+      },
+      onError: (res: any, err: any) => {
+        if (err.response.status === 401 || err.response.status === 403) {
+          console.log(err, res);
+          router.push('/board');
+        }
+      },
+    }
+  );
+
+  const removeBookMarkMutation = useMutation(
+    async (postingId: string | string[] | undefined) => {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/board/${postingId}/book-mark`
+      );
+    },
+    {
+      onSuccess: (_, variables) => {
+        const previousData = queryClient.getQueryData<BookMark[]>([BOOK_MARK]);
+        if (previousData) {
+          queryClient.setQueryData(
+            [BOOK_MARK],
+            previousData.filter((posting) => posting.id !== variables)
+          );
+        }
       },
       onError: (err: any) => {
         if (err.response.status === 401 || err.response.status === 403) {
@@ -153,7 +184,8 @@ export const useMutatePosting = (
   return {
     createPostingMutation,
     commentPostingMutation,
-    bookMarkMutation,
+    bookMarkAddMutation,
+    removeBookMarkMutation,
     deletePostingMutation,
   };
 };
