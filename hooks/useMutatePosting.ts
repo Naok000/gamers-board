@@ -22,7 +22,7 @@ export const useMutatePosting = (
     any,
     any,
     string | string[] | undefined,
-    { previousData: BookMark[] | undefined }
+    unknown
   >;
   removeBookMarkMutation: UseMutationResult<
     void,
