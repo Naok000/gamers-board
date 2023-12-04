@@ -12,7 +12,7 @@ type Props = {
   scheme?: string;
   mx?: number;
   ml?: number;
-  text: string;
+  text?: string;
   hover?: SystemStyleObject | undefined;
   reference?: LegacyRef<HTMLButtonElement> | undefined;
   clickAct: React.MouseEventHandler<HTMLButtonElement> | undefined;

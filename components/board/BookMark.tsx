@@ -1,4 +1,4 @@
-import { Box, IconButton } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import React, { MouseEventHandler } from 'react';
 import { GiBookmark, GiBookmarklet } from 'react-icons/gi';
 import CommonButton from '../CommonButton';
