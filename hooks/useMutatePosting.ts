@@ -114,7 +114,6 @@ export const useMutatePosting = (
     },
     {
       onSuccess: async (res) => {
-        await queryClient.cancelQueries([BOOK_MARK]);
         const previousData = queryClient.getQueryData<BookMark[]>([BOOK_MARK]);
         if (previousData) {
           queryClient.setQueryData([BOOK_MARK], [res, ...previousData]);
