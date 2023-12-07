@@ -14,7 +14,7 @@ import {
   useQueryPostingId,
 } from '../../hooks/useQueryPosting';
 import { ArrowBackIcon, ChatIcon, DeleteIcon } from '@chakra-ui/icons';
-import { useQueryUser } from '../../hooks/useQueryUser';
+import { useQueryBookmark, useQueryUser } from '../../hooks/useQueryUser';
 import { Layout } from '../../components/Layout';
 import AlertDeleteDialog from '../../components/board/AlertDeleteDialog';
 import CommentItem from '../../components/board/CommentItem';
@@ -34,8 +34,12 @@ const DetailPostingPage = () => {
   const [comment, setComment] = useState('');
 
   const { data: user, status } = useQueryUser();
+  const { data: bookmark } = useQueryBookmark();
   const { data: posting } = useQueryPostingId(postingId);
   const { data: comments, isSuccess } = useQueryComment(postingId);
+  const userBookmarkId = bookmark?.filter(
+    (book) => book.postingId === postingId
+  )[0]?.id;
 
   // Ability to post comments and delete listings
   const { newComment, deletePosting } = postingInternalFunc(
@@ -103,7 +107,7 @@ const DetailPostingPage = () => {
                         text='Comment'
                       />
                       <BookMark
-                        bookMarkId={posting?.bookMark[0]?.id}
+                        bookMarkId={userBookmarkId}
                         bookMarkAdd={() => addBookMark(postingId)}
                         bookMarkRemove={() => removeBookMark(postingId)}
                       />
